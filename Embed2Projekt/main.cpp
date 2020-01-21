@@ -5,19 +5,19 @@
 // main() runs in its own thread in the OS
 
 
-//Temperature tempSensor(A0,D2,D3);
+Temperature tempSensor(A0,D2,D3);
 //Sound soundSensor(A1);
-LightSensor lightSensor(A2);
+//LightSensor lightSensor(A2);
 int main()
 {
-    float read;
-    lightSensor.threshold = 0.3f;
+    int read;
+    //lightSensor.threshold = 0.3f;
     while (true) {
-        //read = tempSensor.readTemperature(C);
+        read = tempSensor.readTemperature(F);
 
        // read = soundSensor.readSound();
-        read = lightSensor.readLight();
-        printf("Light is %f and isItDay is %d \n", read, lightSensor.isItDay);
+        //read = lightSensor.readLight();
+        printf("Tempereature in Fahnheit %i \n\r", read);
         
         ThisThread::sleep_for(1000);
     }
