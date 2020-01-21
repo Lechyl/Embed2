@@ -11,7 +11,7 @@ int main()
     
     while (true) {
         read = tempSensor.readTemperature(C);
-        printf("tempereature is %i ", read);
+        printf("tempereature is %i \n", read);
         
         ThisThread::sleep_for(5000);
     }
