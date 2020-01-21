@@ -3,17 +3,17 @@
 // main() runs in its own thread in the OS
 
 
-AnalogIn tempSensor(A0);
-Temperature tmp;
+Temperature tempSensor(A0,D2,D3);
+
 int main()
 {
     int read;
     
     while (true) {
-        read = tmp.readTemperature(C, tempSensor);
-        printf("tempereature is %i \n", read);
+        read = tempSensor.readTemperature(C);
+        printf("tempereature is %i ", read);
         
-        ThisThread::sleep_for(1000);
+        ThisThread::sleep_for(5000);
     }
 }
 
