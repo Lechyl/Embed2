@@ -1,3 +1,6 @@
+
+#ifndef TEMP_TOKEN
+#define TEMP_TOKEN
 #include "mbed.h"
 
 enum Type{C = 0, F = 1};
@@ -13,8 +16,10 @@ class Temperature{
   
 
     public:
-        Temperature(PinName tempSensor, PinName ledForHotTemp, PinName ledForColdTemp);
+        Temperature(PinName pinTempSensor, PinName pinLedForHotTemp, PinName pinLedForColdTemp);
         ~Temperature();
         int readTemperature(Type type);
 
 };
+
+#endif

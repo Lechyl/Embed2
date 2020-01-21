@@ -9,10 +9,10 @@
 
 
 /// Constructor, contain 3 pin parameters for tempereature sensor, led for too hot, led for too cold.
-Temperature::Temperature(PinName tempSensor, PinName ledForHotTemp,PinName ledForColdTemp){
-    _tempSensor = tempSensor;
-    _ledForHotTemp = ledForHotTemp;
-    _ledForColdTemp = ledForColdTemp;
+Temperature::Temperature(PinName pinTempSensor, PinName pinLedForHotTemp,PinName pinLedForColdTemp){
+    _tempSensor = pinTempSensor;
+    _ledForHotTemp = pinLedForHotTemp;
+    _ledForColdTemp = pinLedForColdTemp;
 }
 
 /// Destructor for the destruction of the class object.
