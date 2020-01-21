@@ -25,13 +25,15 @@ int Temperature::readTemperature(Type type){
     DigitalOut ledHot (_ledForHotTemp);
     DigitalOut ledCold (_ledForColdTemp);
     a = tempSensor.read_u16();
+
+    /// Calculate the resistance of the thermistor from analog votage read.
+    resistance = (float) 10000.0 * ((65536.0 / a) - 1.0);
+
+    /// Convert the resistance to temperature using Steinhart's Hart equation. 
+    _temperature=(1/((log(resistance/10000.0)/beta) + (1.0/298.15)))-273.15; 
+
     switch(type){
         case C:
-            /// Calculate the resistance of the thermistor from analog votage read.
-            resistance = (float) 10000.0 * ((65536.0 / a) - 1.0);
-
-             /// Convert the resistance to temperature using Steinhart's Hart equation. 
-            _temperature=(1/((log(resistance/10000.0)/beta) + (1.0/298.15)))-273.15; 
 
             /// over home temp >= 24
             ledHot = (int)_temperature >= 24 ? 1 : 0;
@@ -41,6 +43,10 @@ int Temperature::readTemperature(Type type){
 
             break;
         case F:
+            ///convert from Celcius to Fahrenheit
+
+            _temperature = (_temperature*1.8)+32;
+            
             break;
     }
 
