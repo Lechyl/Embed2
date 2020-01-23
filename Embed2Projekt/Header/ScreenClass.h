@@ -1,15 +1,22 @@
+#ifndef ScreenClass_Nilas
+#define ScreenClass_Nilas
+
 #include "mbed.h"
 #include "stm32746g_discovery_lcd.h"
 #include "stm32746g_discovery_ts.h"
+#include<string> // for string class 
 
 class Screen{
 
 
     private:
+        uint8_t xLength;
+        uint8_t yLength;
         uint8_t status;
-        TS_StateTypeDef TS_State;
+        char* buttons;
     public:
-        
+        TS_StateTypeDef TS_State;
+        string text; 
         /*
         *
         *
@@ -24,4 +31,11 @@ class Screen{
         void ErrorScreen();
         void LoadingScreen(char title[], char subTitle[]);
 
+
+        void DrawSquare(uint16_t Xpos, uint16_t Ypos, uint16_t Width, uint16_t Height, uint8_t* text);
+
+        void GetLocationInfo();
+        void Keyboard();
+
 };  
+#endif

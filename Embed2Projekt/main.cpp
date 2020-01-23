@@ -7,6 +7,7 @@ int main()
     Screen* test = new Screen();
 
     while (true) {
+            BSP_LCD_DisplayStringAt(250,280, (uint8_t *) "Enter",LEFT_MODE);
 
     }
 }
