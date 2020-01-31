@@ -4,6 +4,7 @@
 #include "mbed.h"
 #include "stm32746g_discovery_lcd.h"
 #include "stm32746g_discovery_ts.h"
+#include <math.h> //Rounding function
 #include<string> // for string class 
 
 class Screen{
@@ -36,6 +37,8 @@ class Screen{
 
         void GetLocationInfo();
         void Keyboard();
+
+        void ScreenOne(int temperature, float light, float sound);
 
 };  
 #endif

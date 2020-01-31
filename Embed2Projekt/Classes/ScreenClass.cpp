@@ -9,10 +9,13 @@ Screen::Screen(){
     ChangeColorScheme(LCD_COLOR_BLACK,LCD_COLOR_WHITE);
     if(status != TS_OK){
         ErrorScreen();
-    }else{
+    }
+    /*
+    
+    else{
         LoadingScreen("Long and Nilas Project", "Work in progress");
     }
-
+    */
 }
 
 void Screen::GetLocationInfo(){
@@ -73,57 +76,119 @@ void Screen::DrawSquare(uint16_t Xpos, uint16_t Ypos, uint16_t Width, uint16_t H
     BSP_LCD_SetBackColor(backgroundColor);
     BSP_LCD_SetTextColor(textColor);
 }
-
-void Screen::Keyboard(){
-    buttons = new char[13];
-    for(int i=0;i <= 9;i++){
-        buttons[i] = (char)i;
-    }
-    buttons[10]='n';buttons[11]=0;buttons[12]='y';
+/* 
+void Screen::KeyboardShow(){
+    char button [2];
+    char * buttons = new char[4];
+    buttons[0]='n';buttons[1]='0';buttons[2]='y';
     uint16_t xPos;
     uint16_t yPos;
-    for(int i = 0;i < 12;i++){
+    for(int i = 0;i < 9;i++){
         xPos = (40*(i%3))+150;
         yPos = 30*(i/3)+150;
-        DrawSquare(xPos, yPos,  30,  25, (uint8_t *) "a");
-    }    
+        sprintf(button,"%d",i+1);
+        DrawSquare(xPos, yPos,  30,  25, (uint8_t *)  button );
+    }
+
+    int i = 9;
+    DrawSquare((40*(i%3))+150, 30*(i/3)+150,  30,  25, (uint8_t *)  "n" );
+
+    i++;
+    sprintf(button,"%d",0);
+    DrawSquare((40*(i%3))+150, 30*(i/3)+150,  30,  25, (uint8_t *)  button );
+    i++;
+    DrawSquare((40*(i%3))+150, 30*(i/3)+150,  30,  25, (uint8_t *)  "y" );
+    BSP_LCD_DisplayStringAt(100, LINE(5), (uint8_t *) "Lokale: ",LEFT_MODE);
+    ThisThread::sleep_for(100);
+
+}
+*/
+void Screen::Keyboard(){
+    char button [2];
+    char * buttons = new char[4];
+    buttons[0]='n';buttons[1]='0';buttons[2]='y';
+    uint16_t xPos;
+    uint16_t yPos;
+    for(int i = 0;i < 9;i++){
+        xPos = (40*(i%3))+150;
+        yPos = 30*(i/3)+150;
+        sprintf(button,"%d",i+1);
+        DrawSquare(xPos, yPos,  30,  25, (uint8_t *)  button );
+    }
+
+    int i = 9;
+    DrawSquare((40*(i%3))+150, 30*(i/3)+150,  30,  25, (uint8_t *)  "n" );
+
+    i++;
+    sprintf(button,"%d",0);
+    DrawSquare((40*(i%3))+150, 30*(i/3)+150,  30,  25, (uint8_t *)  button );
+    i++;
+    DrawSquare((40*(i%3))+150, 30*(i/3)+150,  30,  25, (uint8_t *)  "y" );
+    BSP_LCD_DisplayStringAt(100, LINE(5), (uint8_t *) "Lokale: ",LEFT_MODE);
+    ThisThread::sleep_for(100);
+
     while(1){
         BSP_TS_GetState(&TS_State);
         if(TS_State.touchDetected){
             if(150 < TS_State.touchX[0] &&  TS_State.touchX[0]< 180){
-                if((150 < TS_State.touchY[0] &&  TS_State.touchY[0]< 175)){
+                if((150 < TS_State.touchX[0] &&  TS_State.touchY[0]< 175)){
                     text.push_back('1');
                 }else  if(180 < TS_State.touchY[0] &&  TS_State.touchY[0]< 205){
-                    text.push_back('2');
+                    text.push_back('4');
                 }else if (210 < TS_State.touchY[0] &&  TS_State.touchY[0]< 235){
-                    text.push_back('3');
-                   
+                    text.push_back('7');                   
+                }else if((240 < TS_State.touchY[0] &&  TS_State.touchY[0]< 265)){
+                    text.pop_back();
                 }
             }else if (190 < TS_State.touchX[0] &&  TS_State.touchX[0]< 220){
                 if((150 < TS_State.touchY[0] &&  TS_State.touchY[0]< 175)){
-                    text.push_back('4');
+                    text.push_back('2');
                 }else  if(180 < TS_State.touchY[0] &&  TS_State.touchY[0]< 205){
                     text.push_back('5');
                 }else if (210 < TS_State.touchY[0] &&  TS_State.touchY[0]< 235){
-                    text.push_back('6');
+                    text.push_back('8');
+                }else if((240 < TS_State.touchY[0] &&  TS_State.touchY[0]< 265)){
+                    text.push_back('0');
                 }
             }else if(230 < TS_State.touchX[0] &&  TS_State.touchX[0]< 260){
                 if((150 < TS_State.touchY[0] &&  TS_State.touchY[0]< 175)){
-                    text.push_back('7');
+                    text.push_back('3');
                 }else  if(180 < TS_State.touchY[0] &&  TS_State.touchY[0]< 205){
-                    text.push_back('8');
+                    text.push_back('6');
                 }else if (210 < TS_State.touchY[0] &&  TS_State.touchY[0]< 235){
                     text.push_back('9');
-                }
-            }else if(270 < TS_State.touchX[0] &&  TS_State.touchX[0]< 300){
-                if((150 < TS_State.touchY[0] &&  TS_State.touchY[0]< 175)){
-                    text.pop_back()
-                }else  if(180 < TS_State.touchY[0] &&  TS_State.touchY[0]< 205){
-                    text.push_back('0');
-                }else if (210 < TS_State.touchY[0] &&  TS_State.touchY[0]< 235){
+                }else if((240 < TS_State.touchY[0] &&  TS_State.touchY[0]< 265)){
                     break;
                 }
             }
+            BSP_LCD_DisplayStringAt(100, LINE(5), (uint8_t *) "                  ", LEFT_MODE);
+            BSP_LCD_DisplayStringAt(100, LINE(5), (uint8_t *) ("Lokale: "+text).c_str(), LEFT_MODE);
+            ThisThread::sleep_for(500);
         }
     }
+    BSP_LCD_Clear(LCD_COLOR_WHITE);
 }
+
+/*
+    Screen one
+ */
+ void Screen::ScreenOne(int temperature, float light, float sound){
+     char stringValues[20];
+     BSP_LCD_DisplayStringAt(0, LINE(0  ), (uint8_t *) ("Lokale: "+text).c_str() , LEFT_MODE);
+     sprintf(stringValues, "Temperatur: %d",temperature);
+     BSP_LCD_DisplayStringAt(0, LINE(2), (uint8_t *) stringValues , LEFT_MODE);
+     sprintf(stringValues, "Light: %f",round(light));
+     BSP_LCD_DisplayStringAt(0, LINE(4), (uint8_t *) stringValues , LEFT_MODE);
+    sprintf(stringValues, "Sound: %f",round(sound));
+     BSP_LCD_DisplayStringAt(0, LINE(6), (uint8_t *) stringValues , LEFT_MODE);
+ }
+
+ 
+
+ /*
+    Screen 2
+  */
+
+  /*
+    Screen 3
+   */
