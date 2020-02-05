@@ -28,14 +28,15 @@ float Sound::readSound(){
     /// Sample Sound to get a more accurate sound value 
     /// https://electronics.stackexchange.com/questions/96205/how-to-convert-volts-in-db-spl?fbclid=IwAR1g52qr6Wfldj5vlB3zHOJC6dMW5-Ycucwy1_4_UExytM3taPdswdH45rQ
     float dB;
-    for(int i = 0;i < 16;i++){
+    for(int i = 0;i < 10;i++){
 
     /// 3.3 is the voltage being measured, and sample the reference level/Voltage being measured
        dB += soundSensor.read();
+       wait(0.1);
         
     }
     
-    dB = dB/16;
+    dB = dB/10;
     dB = 3.3/dB;
 
     dB = 20 * log(dB);
