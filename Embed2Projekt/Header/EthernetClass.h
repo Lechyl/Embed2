@@ -8,9 +8,6 @@
 
 class Ethernet{
     private:
-        //  EthernetInterface _eth;
-        //NTPClient _ntp;
-
     public:
         Ethernet();
         ~Ethernet();

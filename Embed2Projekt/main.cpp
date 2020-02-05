@@ -9,6 +9,7 @@ Thread ScreenThread;
 #include "Sound.h"
 #include "LightSensor.h"
 #include "EthernetClass.h"
+#include "Alarm.h"
 
 // main() runs in its own thread in the OS
 
@@ -31,7 +32,10 @@ TS_StateTypeDef TS_State;
 //Object to get the time via ethernet
 Ethernet net;
 
-Sound soundSensor(A1);
+//Alarm object
+Alarm* alarm = new Alarm(D4);
+
+//Sound soundSensor(A1);
 //LightSensor lightSensor(A2);
 SD sd ;
 int main()
@@ -43,7 +47,7 @@ int main()
     location = Information;
 
     //New instance of the screen class. Used to navigate    
-    Screen* screen = new Screen(soundSensor);
+    Screen* screen = new Screen();
     //Read the light. Used to make sure it'sday
     lightSensor.readLight();
     if(!lightSensor.isItDay){
@@ -107,7 +111,14 @@ int main()
                         break;
                     //Case screen locked
                     case 3:
+                        screen->Keyboard("Password");
                         
+                        if(sd.ReadPassword(screen->text)){
+                            location=Information;
+                            alarm->alarmOff();
+                        }else{
+                            alarm->alarmOn();
+                        }
                         break;
                     //Default error
                     default:

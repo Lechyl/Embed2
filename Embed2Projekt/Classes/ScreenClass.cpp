@@ -243,6 +243,14 @@ void Screen::ScreenTwo(int counter){
 
 }
 
-/*
-Screen 3
+
+/**
+*
+*   @author:  Nilas
+*   @date: 21/1-20
+*   @brief: Show the locked screen
 */
+void Screen::locked(){
+    BSP_LCD_Clear(LCD_COLOR_WHITE);
+    BSP_LCD_DisplayStringAt(0, 0, (uint8_t *) "Device is locked", CENTER_MODE);
+}
