@@ -50,18 +50,8 @@ int main()
         location=Locked;
     }
    
-/* 
-    Screen* test = new Screen();
-    test->LoadingScreen("Nilas og Long", "Work in progress");
-    */
-    float d;
-    while (true) {
-        d =soundSensor.readSound();
-        printf("%f dB \n",d);
 
-        
-            //BSP_LCD_DisplayStringAt(250,280, (uint8_t *) "Enter",LEFT_MODE);
-    }
+
 
     //Get room number
     screen->LoadingScreen("Nilas og Long", "Work in progress");
