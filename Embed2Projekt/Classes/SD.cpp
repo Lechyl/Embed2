@@ -49,37 +49,7 @@ void SD::CreateFile(const char* t){
     return_error(error);
     wait(15);
     printf("Filesystem complete, You can now safely remove the sd card.\r\n");
-   /* printf("Re-opening file read-only.");
-    fd = fopen("/fs/numbers.txt", "r");
-    errno_error(fd);
- 
-    printf("Dumping file to screen.\r\n");
-    char buff[16] = { 0 };
-    while(!feof (fd)) {
-        int size = fread(&buff[0], 1, 15, fd);
-        fwrite(&buff[0], 1, size, stdout);
-    }
-    printf("EOF.\r\n");
- 
-    printf("Closing file.");
-    fclose(fd);
-    printf(" done.\r\n");
- 
-    printf("Opening root directory.");
-    DIR* dir = opendir("/fs/");
-    errno_error(fd);
- 
-    struct dirent* de;
-    printf("Printing all filenames:\r\n");
-    while((de = readdir (dir)) != NULL) {
-        printf("  %s\r\n", &(de->d_name)[0]);
-    }
- 
-    printf("Closeing root directory. ");
-    error = closedir(dir);
-    return_error(error); */
 
- 
 }
 bool SD::ReadPassword(string passwordIn){
     hasError= false;
@@ -104,8 +74,7 @@ bool SD::ReadPassword(string passwordIn){
         }
     printf(("password input = "+ passwordIn).c_str());
 
-       // string test = &buff[0];
-      //  printf(" %i == %i ",*passwordIn,&buff[0] );
+
         if(passwordIn.c_str() ==(string)&buff[0] ){
             printf(" Correct Password \n");
             validPassword = true;
@@ -117,25 +86,11 @@ bool SD::ReadPassword(string passwordIn){
 
 
     }
-            printf("Unmounting ");
+        printf("Unmounting ");
         error = fs->unmount();
         return_error(error);
         wait(15);
         printf("Filesystem complete, You can now safely remove the sd card.\r\n");
 
-/*    printf("Opening root directory.");
-    DIR* dir = opendir("/fs/");
-    errno_error(fd);
- 
-    struct dirent* de;
-    printf("Printing all filenames:\r\n");
-    while((de = readdir (dir)) != NULL) {
-        printf("  %s\r\n", &(de->d_name)[0]);
-    }
- 
-    printf("Closeing root directory. ");
-    error = closedir(dir);
-    return_error(error); 
-*/
     return validPassword;
 }

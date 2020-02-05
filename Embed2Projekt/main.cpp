@@ -13,21 +13,25 @@ Thread ScreenThread;
 
 
 Temperature tempSensor(A0,D2,D3);
-//Sound soundSensor(A1);
+Sound soundSensor(A1);
 //LightSensor lightSensor(A2);
 SD sd ;
 int main()
 {   
     
     
-    //sd.CreateFile("/fs/kkona.txt");
     
-    sd.ReadPassword("123456");
+    //sd.ReadPassword("123456");
 /* 
     Screen* test = new Screen();
     test->LoadingScreen("Nilas og Long", "Work in progress");
     */
+    float d;
     while (true) {
+        d =soundSensor.readSound();
+        printf("%f dB \n",d);
+
+        wait(0.2);
             //BSP_LCD_DisplayStringAt(250,280, (uint8_t *) "Enter",LEFT_MODE);
     }
 }

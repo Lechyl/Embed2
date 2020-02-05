@@ -1,5 +1,4 @@
 
-
 #ifndef SOUND_TOKEN
 #define SOUND_TOKEN
 
@@ -12,11 +11,11 @@ class Sound{
 
 
     public:
-        int getCounter;
-        int getHighScore;
+        int getCounter = 0;
+        float getHighScore = 0.0;
         Sound(PinName pin);
         ~Sound();
-        int readSound();
+        float readSound();
 };
 
 
