@@ -17,7 +17,6 @@ class Screen{
         uint8_t yLength;
         uint8_t status;
         char* buttons;
-        Sound* _sound;
 
 
     public:
@@ -41,11 +40,12 @@ class Screen{
         void DrawSquare(uint16_t Xpos, uint16_t Ypos, uint16_t Width, uint16_t Height, uint8_t* text);
 
         void GetLocationInfo();
+        
         void Keyboard();
 
-        void ScreenOne(int temperature, float light, float sound);
-        //void ScreenTwo(Sound* sound);
-        void ScreenTwo();
+        void ScreenOne(int temperature, float light, float sound, time_t* time);
+
+        void ScreenTwo(int counter);
 
         void locked();
 

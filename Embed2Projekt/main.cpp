@@ -12,36 +12,43 @@ Thread ScreenThread;
 
 // main() runs in its own thread in the OS
 
-
+//Different sensors
 Temperature tempSensor(A0,D2,D3);
 
 Sound* soundSensor = new Sound(A1);
 
-enum UserLocation location;
-
-enum Type type(C);
-
 LightSensor lightSensor(A2);
 
+//Enum containing the relevant screen
+enum UserLocation location;
+
+//Enum containing the temperature type
+enum Type type(C);
+
+//Used to detect touches on the screen
 TS_StateTypeDef TS_State;
+
+//Object to get the time via ethernet
 Ethernet net;
 
 int main()
 {
+    //Set the default location
     location = Information;
-    Screen* screen = new Screen(soundSensor);
-    
-    lightSensor.readLight();
-//    if(!lightSensor.isItDay);
 
+    //New instance of the screen class. Used to navigate    
+    Screen* screen = new Screen(soundSensor);
+    //Read the light. Used to make sure it'sday
+    lightSensor.readLight();
+    if(!lightSensor.isItDay){
+        location=Locked;
+    }
+
+    //Get room number
     screen->LoadingScreen("Nilas og Long", "Work in progress");
 
     while (true) {
-        //Get light and update isItDay
-
-        //Load screen based on UserLocation
-//enum UserLocation{Loading = 0, Information = 1, LoudInfo=2, Locked = 3};
-
+        //Change the screen based on location
         switch (location){
             //Case loading
             case 0:
@@ -50,7 +57,7 @@ int main()
 
             //Case screen information
             case 1:
-                screen->ScreenOne(tempSensor.readTemperature(type), lightSensor.readLight(), soundSensor->readSound());
+                screen->ScreenOne(tempSensor.readTemperature(type), lightSensor.readLight(), soundSensor->readSound(), net.getTime());
                 break;
             //Case screen load noises
             case 2:
@@ -65,7 +72,7 @@ int main()
                 break;
 
         }
-        
+        //Run while loop checking for touch input
         while(1){
             BSP_TS_GetState(&TS_State);
             if(TS_State.touchDetected){

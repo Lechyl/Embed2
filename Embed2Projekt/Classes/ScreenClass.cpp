@@ -180,7 +180,7 @@ void Screen::Keyboard(){
 /*
 Screen one
 */
-void Screen::ScreenOne(int temperature, float light, float sound){
+void Screen::ScreenOne(int temperature, float light, float sound, time_t* time){
     char stringValues[20];
     BSP_LCD_DisplayStringAt(0, LINE(0  ), (uint8_t *) ("Lokale: "+text).c_str() , LEFT_MODE);
     sprintf(stringValues, "Temperatur: %d",temperature);
@@ -189,6 +189,8 @@ void Screen::ScreenOne(int temperature, float light, float sound){
     BSP_LCD_DisplayStringAt(0, LINE(4), (uint8_t *) stringValues , LEFT_MODE);
     sprintf(stringValues, "Sound: %f.2f",sound);
     BSP_LCD_DisplayStringAt(0, LINE(6), (uint8_t *) stringValues , LEFT_MODE);
+    sprintf(stringValues, "Time: %s",ctime(time));
+    BSP_LCD_DisplayStringAt(0, LINE(8), (uint8_t *) stringValues , LEFT_MODE);
     DrawSquare( 0, 200, 50,  50, (uint8_t *) "Loud noise");
 }
 
@@ -198,10 +200,10 @@ void Screen::ScreenOne(int temperature, float light, float sound){
 Screen 2
 Sound* sound
 */
-void Screen::ScreenTwo(){
+void Screen::ScreenTwo(int counter){
     BSP_LCD_Clear(LCD_COLOR_WHITE);
     char stringValues[20];
-    sprintf(stringValues, "Loud noises: %d",_sound->getCounter);
+    sprintf(stringValues, "Loud noises: %d",counter);
     BSP_LCD_DisplayStringAt(0, LINE(0), (uint8_t *) stringValues , LEFT_MODE);
 
     DrawSquare( 0, 100, 50,  50, (uint8_t *) "Reset");
