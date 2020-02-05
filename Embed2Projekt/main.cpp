@@ -4,7 +4,7 @@
 
 
 Thread ScreenThread;
-
+#include "SD.h"
 #include "Temperature.h"
 #include "Sound.h"
 #include "LightSensor.h"
@@ -31,8 +31,12 @@ TS_StateTypeDef TS_State;
 //Object to get the time via ethernet
 Ethernet net;
 
+Sound soundSensor(A1);
+//LightSensor lightSensor(A2);
+SD sd ;
 int main()
-{
+{   
+    
     //Set the default location
     location = Information;
 
@@ -42,6 +46,19 @@ int main()
     lightSensor.readLight();
     if(!lightSensor.isItDay){
         location=Locked;
+    }
+    //sd.ReadPassword("123456");
+/* 
+    Screen* test = new Screen();
+    test->LoadingScreen("Nilas og Long", "Work in progress");
+    */
+    float d;
+    while (true) {
+        d =soundSensor.readSound();
+        printf("%f dB \n",d);
+
+        
+            //BSP_LCD_DisplayStringAt(250,280, (uint8_t *) "Enter",LEFT_MODE);
     }
 
     //Get room number

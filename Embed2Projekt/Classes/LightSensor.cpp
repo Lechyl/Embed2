@@ -15,9 +15,10 @@ LightSensor::LightSensor(PinName pin){
 float LightSensor::readLight()
 {
     AnalogIn lightSensor (_lightSensor);
+    
     float lightValue = lightSensor.read();
     
-    isItDay = lightValue >= threshold ? true : false;
+    isItDay = &lightValue >= &threshold ? true : false;
 
     return lightValue;
 }
