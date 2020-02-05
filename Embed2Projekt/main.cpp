@@ -8,6 +8,7 @@ Thread ScreenThread;
 #include "Temperature.h"
 #include "Sound.h"
 #include "LightSensor.h"
+#include "EthernetClass.h"
 
 // main() runs in its own thread in the OS
 
@@ -23,12 +24,13 @@ enum Type type(C);
 LightSensor lightSensor(A2);
 
 TS_StateTypeDef TS_State;
+Ethernet net;
 
 int main()
 {
     location = Information;
     Screen* screen = new Screen(soundSensor);
-
+    
     lightSensor.readLight();
 //    if(!lightSensor.isItDay);
 

@@ -1,6 +1,11 @@
 #include "ScreenClass.h"
 
-
+/**
+*
+*   @author:  Nilas
+*   @date: 21/1-20
+*   @brief: This class contains all methods used for the screen
+*/
 Screen::Screen(Sound* sound){
 BSP_LCD_Init();
 BSP_LCD_LayerDefaultInit(LTDC_ACTIVE_LAYER, LCD_FB_START_ADDRESS);
