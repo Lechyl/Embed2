@@ -205,7 +205,7 @@ void Screen::Keyboard(string inputText){
 *   @param: temperature    Temperature in the room
 *   @param: light          Checks if the light is on
 *   @param: sound          Display sound in db
-*   @param: time           Timestamp since 1. January 1970 in seconds
+*   @param: time           Timestamp     since 1. January 1970 in seconds
 
 */
 void Screen::ScreenOne(int temperature, float light, float sound, time_t* time){
