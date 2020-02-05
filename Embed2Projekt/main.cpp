@@ -68,35 +68,34 @@ int main()
             BSP_TS_GetState(&TS_State);
             if(TS_State.touchDetected){
                 switch (location){
-                //Case loading
-                case 0:
-                    screen->LoadingScreen("Nilas og Long", "Work in progress");
-                    break;
+                    //Case loading
+                    case 0:
+                        screen->LoadingScreen("Nilas og Long", "Work in progress");
+                        break;
 
-                //Case screen information
-                case 1:
-                    if((0 < TS_State.touchX[0] &&  TS_State.touchX[0]< 50) && (200 < TS_State.touchY[0] &&  TS_State.touchY[0]< 250)){
-                        location = LoudInfo;
-                    }
-                    break;
-                //Case screen load noises
-                case 2:
-                    if((0 < TS_State.touchX[0] &&  TS_State.touchX[0]< 1150) && (100 < TS_State.touchY[0] &&  TS_State.touchY[0]< 150)){
-                        soundSensor->getCounter = 0;
-                    }else if((0 < TS_State.touchX[0] &&  TS_State.touchX[0]< 150) && (200 < TS_State.touchY[0] &&  TS_State.touchY[0]< 250)){
-                        location = Information;
-                    }
-                    break;
-                //Case screen locked
-                case 3:
-                    
-                    break;
-                //Default error
-                default:
-                    break;
-
+                    //Case screen information
+                    case 1:
+                        if((0 < TS_State.touchX[0] &&  TS_State.touchX[0]< 50) && (200 < TS_State.touchY[0] &&  TS_State.touchY[0]< 250)){
+                            location = LoudInfo;
+                        }
+                        break;
+                    //Case screen load noises
+                    case 2:
+                        if((0 < TS_State.touchX[0] &&  TS_State.touchX[0]< 1150) && (100 < TS_State.touchY[0] &&  TS_State.touchY[0]< 150)){
+                            soundSensor->getCounter = 0;
+                        }else if((0 < TS_State.touchX[0] &&  TS_State.touchX[0]< 150) && (200 < TS_State.touchY[0] &&  TS_State.touchY[0]< 250)){
+                            location = Information;
+                        }
+                        break;
+                    //Case screen locked
+                    case 3:
+                        
+                        break;
+                    //Default error
+                    default:
+                        break;
+                }
             }
-       }
-    }   
+        }   
     }
 }   
