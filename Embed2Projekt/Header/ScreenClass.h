@@ -40,8 +40,8 @@ class Screen{
         void DrawSquare(uint16_t Xpos, uint16_t Ypos, uint16_t Width, uint16_t Height, uint8_t* text);
 
         void GetLocationInfo();
-        
-        void Keyboard();
+
+        void Keyboard(string inputText);
 
         void ScreenOne(int temperature, float light, float sound, time_t* time);
 
