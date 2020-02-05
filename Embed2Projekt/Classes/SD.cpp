@@ -1,24 +1,35 @@
 
 #include "SD.h"
-
+/*
+*
+*
+*   @author: Long and Nilas
+*   @date: 21/1-20
+*   @brief: This is a class for reading and writing to SD card. with SDBlockDeviceDISCOF746NG Library which is only useable by mbed os 5.9 >= 5.0 
+            while we use version 5.15 We tried to make it useable by mbed os 5.15. 
+            Only Write and readable  by FAT volume/system on SD.
+*   @parameters: @threshold = indikator for when it's night and day in float, @isItDay is a bool variable which check if it's day = true/night = false.
+*   
+*
+*/
 
 SD::SD(){
     fs = new FATFileSystem("fs");
 }
-void SD::CreateFile(const char* t){
+void SD::CreateFile(const char* path){
 
 
     printf("Start\n");
  
 
- 
+    /// Mounting the sd to FatFileSystem
     printf("Mounting the filesystem on \"/fs\". ");
     error = fs->mount(&bd);
     return_error(error);
     wait(15);
     if (error) {
-        // Reformat if we can't mount the filesystem
-        // this should only happen on the first boot
+        /// Reformat if we can't mount the filesystem
+        /// this should only happen on the first boot
         printf("No filesystem found, formatting... ");
         
         error = fs->reformat(&bd);
@@ -31,14 +42,14 @@ void SD::CreateFile(const char* t){
 
     
     
-    printf("Opening a new path. %s ",t);
+    printf("Opening a new path. %s ",path);
     
-    FILE* fd = fopen(t, "w");
+    FILE* fd = fopen(path, "w");
     errno_error(fd);
     wait(15);
-    
+
+    printf("Writing something to file done.\r\n");
     int i = fprintf(fd, "bananer");
-    printf("Writing decimal numbers to a file (20/20) done.\r\n");
  
     printf("Closing file. %i ",i);
     fclose(fd);
@@ -49,40 +60,13 @@ void SD::CreateFile(const char* t){
     return_error(error);
     wait(15);
     printf("Filesystem complete, You can now safely remove the sd card.\r\n");
-   /* printf("Re-opening file read-only.");
-    fd = fopen("/fs/numbers.txt", "r");
-    errno_error(fd);
- 
-    printf("Dumping file to screen.\r\n");
-    char buff[16] = { 0 };
-    while(!feof (fd)) {
-        int size = fread(&buff[0], 1, 15, fd);
-        fwrite(&buff[0], 1, size, stdout);
-    }
-    printf("EOF.\r\n");
- 
-    printf("Closing file.");
-    fclose(fd);
-    printf(" done.\r\n");
- 
-    printf("Opening root directory.");
-    DIR* dir = opendir("/fs/");
-    errno_error(fd);
- 
-    struct dirent* de;
-    printf("Printing all filenames:\r\n");
-    while((de = readdir (dir)) != NULL) {
-        printf("  %s\r\n", &(de->d_name)[0]);
-    }
- 
-    printf("Closeing root directory. ");
-    error = closedir(dir);
-    return_error(error); */
 
- 
 }
 bool SD::ReadPassword(string passwordIn){
+
     hasError= false;
+
+    ///Mounting the SD to FatFileSystem
     printf("Mounting the filesystem on \"/fs\". ");
     error = fs->mount(&bd);
     return_error(error);
@@ -95,17 +79,17 @@ bool SD::ReadPassword(string passwordIn){
         
         if(!hasError){
             printf("Dumping file to screen.\r\n");
-            char buff[16];
-            
-           
+
+
+        /// Read From file in specific blocks size and insert into the buffer
+        char buff[16];
         while(!feof (fd)){
             int size = fread(&buff[0], 1, 15, fd);
              fwrite(&buff[0], 1, size, stdout);
         }
     printf(("password input = "+ passwordIn).c_str());
 
-       // string test = &buff[0];
-      //  printf(" %i == %i ",*passwordIn,&buff[0] );
+        ///Compare input and output password
         if(passwordIn.c_str() ==(string)&buff[0] ){
             printf(" Correct Password \n");
             validPassword = true;
@@ -117,25 +101,11 @@ bool SD::ReadPassword(string passwordIn){
 
 
     }
-            printf("Unmounting ");
+        printf("Unmounting ");
         error = fs->unmount();
         return_error(error);
         wait(15);
         printf("Filesystem complete, You can now safely remove the sd card.\r\n");
 
-/*    printf("Opening root directory.");
-    DIR* dir = opendir("/fs/");
-    errno_error(fd);
- 
-    struct dirent* de;
-    printf("Printing all filenames:\r\n");
-    while((de = readdir (dir)) != NULL) {
-        printf("  %s\r\n", &(de->d_name)[0]);
-    }
- 
-    printf("Closeing root directory. ");
-    error = closedir(dir);
-    return_error(error); 
-*/
     return validPassword;
 }

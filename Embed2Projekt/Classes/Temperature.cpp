@@ -29,7 +29,8 @@ int Temperature::readTemperature(Type type){
     /// Calculate the resistance of the thermistor from analog votage read.
     resistance = (float) 10000.0 * ((65536.0 / a) - 1.0);
 
-    /// Convert the resistance to temperature using Steinhart's Hart equation. 
+    /// Convert the resistance to temperature using Steinhart's Hart equation. and from Kelvin to Celcius  
+    
     _temperature=(1/((log(resistance/10000.0)/beta) + (1.0/298.15)))-273.15; 
 
     switch(type){

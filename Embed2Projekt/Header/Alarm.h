@@ -6,11 +6,14 @@
 class Alarm{
 
     public:
-        Alarm(PinName buzzer);
-        bool alarmOn,alarmOff;
-        void alarm();
+        Alarm(PinName pin);
+        void alarmOn(),alarmOff(),alarmTasks();
+        
     private:
+        
         PinName _buzzer;
+        bool turnOnAlarm = false;
+
 };
 
 
