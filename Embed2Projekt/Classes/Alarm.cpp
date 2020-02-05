@@ -2,6 +2,7 @@
 
 Alarm::Alarm(PinName pin){
     _buzzer = pin;
+    Buzzer = new DigitalOut(pin);
 }
 
 void Alarm::alarmOn(){
@@ -10,12 +11,12 @@ void Alarm::alarmOn(){
 }
 void Alarm::alarmOff(){
     turnOnAlarm = false;
-
+    *Buzzer = 0;
 }
 
 void Alarm::alarmTasks(){
-    DigitalInOut buzzer(_buzzer);
+    
     if(turnOnAlarm){
-        buzzer = 1;
+        *Buzzer = 1;
     }  
 }

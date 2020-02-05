@@ -6,4 +6,3 @@ mbed-os
 BUILD
 
 BSP_DISCO_F746NG
-ntp-client

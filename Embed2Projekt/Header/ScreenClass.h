@@ -22,13 +22,8 @@ class Screen{
     public:
         TS_StateTypeDef TS_State;
         string text; 
-        /*
-        *
-        *
-        *
-        *
-         */
-         Screen(Sound* sound);
+
+         Screen();
         ~Screen();
 
         void ChangeColorScheme(uint32_t backgroundColor,uint32_t textColor);

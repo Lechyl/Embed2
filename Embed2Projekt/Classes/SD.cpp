@@ -62,6 +62,7 @@ void SD::CreateFile(const char* path){
     printf("Filesystem complete, You can now safely remove the sd card.\r\n");
 
 }
+
 bool SD::ReadPassword(string passwordIn){
 
     hasError= false;

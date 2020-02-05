@@ -37,6 +37,8 @@ SD sd ;
 int main()
 {   
     
+     //sd.ReadPassword("123456");
+
     //Set the default location
     location = Information;
 
@@ -47,7 +49,7 @@ int main()
     if(!lightSensor.isItDay){
         location=Locked;
     }
-    //sd.ReadPassword("123456");
+   
 /* 
     Screen* test = new Screen();
     test->LoadingScreen("Nilas og Long", "Work in progress");
