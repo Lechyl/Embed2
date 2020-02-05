@@ -17,9 +17,12 @@ Temperature tempSensor(A0,D2,D3);
 //LightSensor lightSensor(A2);
 SD sd ;
 int main()
-{
-sd.Test();
+{   
     
+    
+    //sd.CreateFile("/fs/kkona.txt");
+    
+    sd.ReadPassword("123456");
 /* 
     Screen* test = new Screen();
     test->LoadingScreen("Nilas og Long", "Work in progress");
