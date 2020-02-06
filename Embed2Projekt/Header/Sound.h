@@ -12,6 +12,7 @@ class Sound{
 
     public:
         int getCounter = 0;
+        float threshold = 80.0;
         float getHighScore = 0.0;
         Sound(PinName pin);
         ~Sound();

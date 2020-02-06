@@ -11,7 +11,6 @@
 /// Constructor used to get the PinName from sound sensor
 Sound::Sound(PinName pin){
     _soundSensor = pin;
-
 }
 
 /// destructor
@@ -55,7 +54,7 @@ float Sound::readSound(){
 
     getHighScore = dB > getHighScore ? dB : getHighScore;
 
-    getCounter = dB > 80 ? getCounter +1: getCounter;
+    getCounter = dB > threshold ? getCounter +1: getCounter;
     return dB;
 }
 

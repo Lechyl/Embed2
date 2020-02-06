@@ -221,9 +221,9 @@ void Screen::ScreenOne(int temperature, float light, float sound){
     BSP_LCD_DisplayStringAt(0, LINE(2), (uint8_t *) stringValues , LEFT_MODE);
     sprintf(stringValues, "Sound: %.2f",sound);
     BSP_LCD_DisplayStringAt(0, LINE(3), (uint8_t *) stringValues , LEFT_MODE);
-    DrawSquare( 0, 200, 100,  50, (uint8_t *) "Noise");
-    DrawSquare( 0, 300, 100,  50, (uint8_t *) "Graph");
-    DrawSquare( 0, 400, 100,  50, (uint8_t *) "New Location");
+    DrawSquare( 0, 100, 100,  40, (uint8_t *) "Noise");
+    DrawSquare( 0, 150, 100,  40, (uint8_t *) "Graph");
+    DrawSquare( 0, 200, 100,  40, (uint8_t *) "New Location");
 
 
 }
