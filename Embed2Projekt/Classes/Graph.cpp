@@ -37,8 +37,8 @@ void Graph::initGraph(){
     BSP_LCD_SetTextColor(LCD_COLOR_GREEN);
     sprintf((char*)&text,"Temperature Graph");
     BSP_LCD_DisplayStringAt(0, 24, (uint8_t*)&text, RIGHT_MODE);
-    /// Draw the Graph Diagram
     
+    /// Draw the Graph Diagram
     /// X Line
     BSP_LCD_SetTextColor(LCD_COLOR_BLUE);
     BSP_LCD_DrawLine(20, 250, 450, 250);
@@ -56,17 +56,19 @@ void Graph::initGraph(){
 }   
 void Graph::getGraph(int soundIn,int lightIn,int tempIn){
     
-
+    ///Redraw graph when it exceed the drawing limit.
     if(oldXPos >= 450){
         initGraph();
     }
+
+    ///First Draw
     if(oldXPos == 20){
         oldYPosSound = 250 -soundIn;
         oldYPosLight = 250 - lightIn;
         oldYPosTemp = 250 - tempIn;
         
     }
-    ///Draw graph
+    ///Draw graph for each of the 3 parameters
     for(int i = 0;i < 3;i++){
         switch(i){
             case 0:

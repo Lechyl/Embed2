@@ -15,16 +15,13 @@ Alarm::Alarm(PinName pin){
 
 void Alarm::alarmOn(){
     turnOnAlarm = true;
-
+    
+    if(turnOnAlarm){
+        *Buzzer = 1;
+    }  
 }
 void Alarm::alarmOff(){
     turnOnAlarm = false;
     *Buzzer = 0;
 }
 
-void Alarm::alarmTasks(){
-    
-    if(turnOnAlarm){
-        *Buzzer = 1;
-    }  
-}
