@@ -56,18 +56,8 @@ void DisplayTime(){
 Graph graph;
 int main()
 {   
-    BSP_LCD_Init();
-    BSP_LCD_LayerDefaultInit(LTDC_ACTIVE_LAYER, LCD_FB_START_ADDRESS);
-    BSP_LCD_SelectLayer(LTDC_ACTIVE_LAYER);
-    
-    while(true){
-       float read = soundSensor->readSound();
-        graph.getGraph((int)read);
-       printf("%.2f",read);
-        
 
-    }
-    /* 
+    int seconds = 0;
     //clockThread.start(DisplayTime);    
      //sd.ReadPassword("123456");
     bool touches = true;
@@ -78,9 +68,11 @@ int main()
     //Read the light. Used to make sure it'sday
     lightSensor.readLight();
     
+    
     if(!lightSensor.isItDay){
         location=Locked;
     }
+    
     
     //Check if unlocked
     bool pw=true;
@@ -91,8 +83,14 @@ int main()
 
     while (true) {
         touches = true;
+        if(seconds == 25){
+            seconds =0;
+        }else{
+            seconds++;
+        }
         //Change the screen based on location
-        switch (location){
+        if(seconds == 0){
+            switch (location){
             //Case loading
             case 0:
                 screen->LoadingScreen("Nilas og Long", "Work in progress");
@@ -110,12 +108,18 @@ int main()
             case 3:
                 screen->locked();
                 break;
+            //Case graph
+            case 4:
+                //screen->graph();
+                break;
             //Default error
             default:
                 BSP_LCD_DisplayStringAtLine(LINE(2), (uint8_t *) "Error");
                 break;
 
+            }
         }
+        
         //Run while loop checking for touch input
         BSP_TS_GetState(&TS_State);
         if(TS_State.touchDetected){
@@ -127,17 +131,19 @@ int main()
 
                 //Case screen information
                 case 1:
-                    if((0 < TS_State.touchX[0] &&  TS_State.touchX[0]< 50) && (200 < TS_State.touchY[0] &&  TS_State.touchY[0]< 250)){
+                    if((0 < TS_State.touchX[0] &&  TS_State.touchX[0]< 100) && (200 < TS_State.touchY[0] &&  TS_State.touchY[0]< 250)){
                         location = LoudInfo;
-                    }
-                    touches=false;
+                    }else if((0 < TS_State.touchX[0] &&  TS_State.touchX[0]< 100) && (300 < TS_State.touchY[0] &&  TS_State.touchY[0]< 350))
+                    seconds=25;
                     break;
                 //Case screen load noises
                 case 2:
-                    if((0 < TS_State.touchX[0] &&  TS_State.touchX[0]< 1150) && (100 < TS_State.touchY[0] &&  TS_State.touchY[0]< 150)){
+                    if((0 < TS_State.touchX[0] &&  TS_State.touchX[0]< 100) && (100 < TS_State.touchY[0] &&  TS_State.touchY[0]< 150)){
                         soundSensor->getCounter = 0;
-                    }else if((0 < TS_State.touchX[0] &&  TS_State.touchX[0]< 150) && (200 < TS_State.touchY[0] &&  TS_State.touchY[0]< 250)){
+                        seconds=25;
+                    }else if((0 < TS_State.touchX[0] &&  TS_State.touchX[0]< 200) && (200 < TS_State.touchY[0] &&  TS_State.touchY[0]< 250)){
                         location = Information;
+                        seconds = 25;
                     }
                     touches=false;
                     break;
@@ -147,20 +153,27 @@ int main()
                         screen->Keyboard("Password");
                         if(sd.ReadPassword(screen->text)){
                             location=Information;
-                            //alarm->alarmOff();
+                            alarm->alarmOff();
                             pw=false;
                         }else{
-                            //alarm->alarmOn();
+                            alarm->alarmOn();
+                            alarm->alarmTasks();
                         }
                     }while(pw);
-                    pw=true;                    
+                    pw=true;
+                    seconds=25;                    
                     break;
+
+                //Graph
+                case 4:
+                    break;
+                    
                 //Default error
                 default:
                     break;
             }
         }
-        ThisThread::sleep_for(200); 
+        ThisThread::sleep_for(40); 
     }
-    */
+    
 }   

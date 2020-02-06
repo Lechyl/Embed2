@@ -7,7 +7,7 @@
 #include<string> // for string class
 #include "Sound.h"
 
-enum UserLocation{Loading = 0, Information = 1, LoudInfo=2, Locked = 3};
+enum UserLocation{Loading = 0, Information = 1, LoudInfo=2, Locked = 3, Graph=4};
 
 class Screen{
 

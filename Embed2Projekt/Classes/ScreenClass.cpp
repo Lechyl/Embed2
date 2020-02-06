@@ -39,6 +39,7 @@ void Screen::GetLocationInfo(){
     BSP_LCD_Clear(BSP_LCD_GetBackColor());
     Keyboard("Building");
     building = text;
+    ThisThread::sleep_for(200);
     Keyboard("Room Number");
     room=text;
 
@@ -211,6 +212,7 @@ void Screen::Keyboard(string inputText){
 *   @param: sound          Display sound in db
 */
 void Screen::ScreenOne(int temperature, float light, float sound){
+    BSP_LCD_Clear(LCD_COLOR_WHITE);
     char stringValues[20];
     BSP_LCD_DisplayStringAt(0, LINE(0  ), (uint8_t *) ("Lokale: "+room).c_str() , LEFT_MODE);
     sprintf(stringValues, "Temperatur: %d",temperature);
@@ -219,7 +221,9 @@ void Screen::ScreenOne(int temperature, float light, float sound){
     BSP_LCD_DisplayStringAt(0, LINE(2), (uint8_t *) stringValues , LEFT_MODE);
     sprintf(stringValues, "Sound: %.2f",sound);
     BSP_LCD_DisplayStringAt(0, LINE(3), (uint8_t *) stringValues , LEFT_MODE);
-    DrawSquare( 0, 200, 50,  50, (uint8_t *) "Loud noise");
+    DrawSquare( 0, 200, 100,  50, (uint8_t *) "Noise");
+    DrawSquare( 0, 300, 100,  50, (uint8_t *) "Graph");
+
 }
 
 void Screen::DisplayTime(char* time){
@@ -242,9 +246,9 @@ void Screen::ScreenTwo(int counter){
     sprintf(stringValues, "Loud noises: %d",counter);
     BSP_LCD_DisplayStringAt(0, LINE(0), (uint8_t *) stringValues , LEFT_MODE);
 
-    DrawSquare( 0, 100, 50,  50, (uint8_t *) "Reset");
+    DrawSquare( 0, 100, 100,  50, (uint8_t *) "Reset");
 
-    DrawSquare( 0, 200, 50,  50, (uint8_t *) "Information");
+    DrawSquare( 0, 200, 200,  50, (uint8_t *) "Information");
 
 }
 
