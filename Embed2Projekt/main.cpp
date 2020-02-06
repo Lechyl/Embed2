@@ -39,9 +39,9 @@ enum UserLocation location;
 enum Type type(C);
 
 
-float* rtSoundValue;
-float* rtLightValue;
-int* rtTempCValue;
+float rtSoundValue;
+float rtLightValue;
+int rtTempCValue;
 int seconds = 0;
 bool touches = true;
 
@@ -57,9 +57,9 @@ void DisplayTime(){
 }
 void realTimeReadings(){
     while(1){
-       *rtSoundValue = soundSensor->readSound();
-       *rtLightValue = lightSensor.readLight();
-       *rtTempCValue = tempSensor.readTemperature(C);
+       rtSoundValue = soundSensor->readSound();
+       rtLightValue = lightSensor.readLight();
+       rtTempCValue = tempSensor.readTemperature(C);
 
 
         ///Read the light. Used to make sure it's day/night base on threshold
@@ -76,7 +76,8 @@ void screenSettings(){
     screen->LoadingScreen("Nilas og Long", "Work in progress");
 }
 void getCurrentScreenInfo(){
- 
+    while(1){
+
         touches = true;
         if(seconds == 25){
             seconds =0;
@@ -137,9 +138,13 @@ void getCurrentScreenInfo(){
                     break;
             }
         }
+    }
+
 }
 void touchScreen(){
                //Change the screen based on location
+               while(1){
+
         if(seconds == 0){
             switch (location){
             //Case loading
@@ -170,8 +175,10 @@ void touchScreen(){
 
             }
 
-            getCurrentScreenInfo();
+           // getCurrentScreenInfo();
         }
+               }
+
 }
 
 
@@ -192,11 +199,12 @@ int main()
     /// thread for running touch input in real time
     Thread thread2;
     thread2.start(&touchScreen);
-
+    Thread thread3;
+    thread3.start(&getCurrentScreenInfo);
 
     while (true) {
 
-        ThisThread::sleep_for(40); 
+       // ThisThread::sleep_for(40); 
     }
     
 }   

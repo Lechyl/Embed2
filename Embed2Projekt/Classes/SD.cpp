@@ -26,7 +26,7 @@ void SD::CreateFile(const char* path){
     printf("Mounting the filesystem on \"/fs\". ");
     error = fs->mount(&bd);
     return_error(error);
-    wait(15);
+
     if (error) {
         /// Reformat if we can't mount the filesystem
         /// this should only happen on the first boot
@@ -46,7 +46,6 @@ void SD::CreateFile(const char* path){
     
     FILE* fd = fopen(path, "w");
     errno_error(fd);
-    wait(15);
 
     printf("Writing something to file done.\r\n");
     int i = fprintf(fd, "bananer");
@@ -58,7 +57,7 @@ void SD::CreateFile(const char* path){
     printf("Unmounting ");
     error = fs->unmount();
     return_error(error);
-    wait(15);
+
     printf("Filesystem complete, You can now safely remove the sd card.\r\n");
 
 }
@@ -105,7 +104,7 @@ bool SD::ReadPassword(string passwordIn){
         printf("Unmounting ");
         error = fs->unmount();
         return_error(error);
-        wait(1);
+
         printf("Filesystem complete, You can now safely remove the sd card.\r\n");
 
     return validPassword;
