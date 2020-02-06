@@ -25,11 +25,13 @@ char* Ethernet::GetTime(){
     eth.get_ip_address();
 
     //Instanciate the ntp client class
-    NTPClient ntp(&eth);
+    //NTPClient ntp(&eth);
     //Get timestamp
-    time_t timestamp = ntp.get_timestamp();
+   // time_t timestamp = ntp.get_timestamp();
     //Close connection
     eth.disconnect();
+    char e{'d'};
+    char* d =  &e;
+    return d;//ctime(&timestamp);
     
-    return ctime(&timestamp);
 }

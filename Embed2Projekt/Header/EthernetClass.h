@@ -3,7 +3,7 @@
 
 #include "mbed.h"
 #include "EthernetInterface.h"
-#include "ntp-client/NTPClient.h"
+//#include "ntp-client/NTPClient.h"
 //#include "time.h"
 
 

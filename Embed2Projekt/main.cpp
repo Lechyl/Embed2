@@ -11,7 +11,7 @@ Thread ScreenThread;
 #include "LightSensor.h"
 #include "EthernetClass.h"
 #include "Alarm.h"
-
+#include "Graph.h"
 // main() runs in its own thread in the OS
 
 
@@ -53,8 +53,10 @@ void DisplayTime(){
     ThisThread::sleep_for(1000);
 }
 
+Graph graph;
 int main()
 {   
+
     int seconds = 0;
     //clockThread.start(DisplayTime);    
      //sd.ReadPassword("123456");
@@ -173,4 +175,5 @@ int main()
         }
         ThisThread::sleep_for(40); 
     }
+    
 }   

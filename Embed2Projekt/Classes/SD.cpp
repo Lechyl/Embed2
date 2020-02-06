@@ -71,7 +71,7 @@ bool SD::ReadPassword(string passwordIn){
     printf("Mounting the filesystem on \"/fs\". ");
     error = fs->mount(&bd);
     return_error(error);
-    wait(15);
+
     if(!hasError){
         
         printf("Reading file /fs/password.txt ");
@@ -105,7 +105,7 @@ bool SD::ReadPassword(string passwordIn){
         printf("Unmounting ");
         error = fs->unmount();
         return_error(error);
-        wait(15);
+        wait(1);
         printf("Filesystem complete, You can now safely remove the sd card.\r\n");
 
     return validPassword;
