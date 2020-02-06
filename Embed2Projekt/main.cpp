@@ -17,6 +17,7 @@ Thread ScreenThread;
 
 
 //Different sensors
+InterruptIn button(D6);
 Temperature tempSensor(A0,D2,D3);
 Thread clockThread;
 Sound* soundSensor = new Sound(A1);
@@ -38,14 +39,15 @@ TS_StateTypeDef TS_State;
 enum UserLocation location;
 
 //Enum containing the temperature type
-enum Type type(C);
+
 
 
 float rtSoundValue;
 float rtLightValue;
 int rtTempCValue;
+int rtTempFValue;
 int seconds = 0;
-
+bool useCelcius = true;
 //Check if unlocked
 bool pw=true;
 
@@ -59,8 +61,15 @@ void realTimeReadings(){
     while(1){
        rtSoundValue = soundSensor->readSound();
        rtLightValue = lightSensor.readLight();
+       if(useCelcius){
        rtTempCValue = tempSensor.readTemperature(C);
 
+       }
+       else {
+       rtTempCValue = tempSensor.readTemperature(F);
+
+       }
+        
 
         ///Read the light. Used to make sure it's day/night base on threshold
         lightSensor.threshold = 0.3;
@@ -191,9 +200,12 @@ void touchScreen(){
         }
 }
 
-
+void buttonInterrupt(){
+    useCelcius = !useCelcius;
+}
 int main()
 {        
+    button.fall(&buttonInterrupt);
     //Set the default location
     location = Information;
 
