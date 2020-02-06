@@ -254,7 +254,7 @@ void Screen::DisplayTime(char* time){
 *   @brief: Screen containing the amount of high noise sounds
 *   @param: counter     Amount of times a high noise was heard
 */
-void Screen::ScreenTwo(int counter, UserLocation location){
+void Screen::ScreenTwo(int counter, UserLocation location, float highScore){
     if(location != 2){
         BSP_LCD_Clear(LCD_COLOR_WHITE);
 

@@ -41,7 +41,7 @@ class Screen{
         void Keyboard(string inputText);
 
         void ScreenOne(int temperature, float light, float sound,UserLocation location);
-        void ScreenTwo(int counter, UserLocation location);
+        void ScreenTwo(int counter, UserLocation location, float highScore);
 
         void DisplayTime(char* time);
 

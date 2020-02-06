@@ -108,7 +108,7 @@ void TouchScreen(){
                 //Case screen information
                 case 1:
                     if((0 < TS_State.touchX[0] &&  TS_State.touchX[0]< 100) && (100 < TS_State.touchY[0] &&  TS_State.touchY[0]< 130)){
-                        screen->ScreenTwo(soundSensor->getCounter, location);
+                        screen->ScreenTwo(soundSensor->getCounter, location, soundSensor->getHighScore);
                         location = LoudInfo;
                     }else if((0 < TS_State.touchX[0] &&  TS_State.touchX[0]< 100) && (150 < TS_State.touchY[0] &&  TS_State.touchY[0]< 180)){
                         BSP_LCD_Clear(LCD_COLOR_BLACK);
@@ -159,7 +159,7 @@ void RefreshPage(){
             break;
         //Case screen load noises
         case 2:
-            screen->ScreenTwo(soundSensor->getCounter, location);
+            screen->ScreenTwo(soundSensor->getCounter, location, soundSensor->getHighScore);
             break;
         //Case screen locked
         case 3:
