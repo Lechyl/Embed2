@@ -17,7 +17,7 @@ Ethernet::~Ethernet(){
 *   @date: 21/1-20
 *   @brief: Get timestamp since 1. january 1970
 */
-char* Ethernet::GetTime(){
+time_t Ethernet::GetTime(){
     //Get ethernet connection
     EthernetInterface eth;
     //Connect to internet and get ip address
@@ -25,13 +25,15 @@ char* Ethernet::GetTime(){
     eth.get_ip_address();
 
     //Instanciate the ntp client class
-    //NTPClient ntp(&eth);
-    //Get timestamp
-   // time_t timestamp = ntp.get_timestamp();
+    NTPClient ntp(&eth);
+    //Get timestamp. Add 1 hour for GTM+1
+    time_t timestamp = ntp.get_timestamp()+3600;
     //Close connection
     eth.disconnect();
-    char e{'d'};
-    char* d =  &e;
-    return d;//ctime(&timestamp);
+
+    //Set time on device
+    set_time(timestamp);
+    //Set time var in main
+    return timestamp;//ctime(&timestamp);
     
 }

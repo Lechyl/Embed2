@@ -53,7 +53,7 @@ float Sound::readSound(){
     
 
     getHighScore = dB > getHighScore ? dB : getHighScore;
-
+    
     getCounter = dB > threshold ? getCounter +1: getCounter;
     return dB;
 }
