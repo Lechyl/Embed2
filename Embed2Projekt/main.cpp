@@ -30,6 +30,8 @@ Screen* screen = new Screen();
 //Object to get the time via ethernet
 Ethernet net;
 
+//Graph object to draw graph
+class Graph graph;
 //Used to detect touches on the screen
 TS_StateTypeDef TS_State;
 //Enum containing the relevant screen
@@ -47,7 +49,6 @@ int seconds = 0;
 //Check if unlocked
 bool pw=true;
 
-class Graph graph;
 Thread screenThread;
 
 void DisplayTime(){
@@ -62,11 +63,13 @@ void realTimeReadings(){
 
 
         ///Read the light. Used to make sure it's day/night base on threshold
-        lightSensor.threshold = 0.01;
-    
-        /*if(lightSensor.isItDay){
+        lightSensor.threshold = 0.3;
+        printf("sound %f  isitday %i\n",rtSoundValue,lightSensor.isItDay);
+        if(!lightSensor.isItDay && rtSoundValue >= soundSensor->threshold){
             location=Locked;
-        }*/
+            alarm->alarmOn();
+            printf("alarm on!\n");
+        }
     }
 }
 void screenSettings(){
@@ -115,7 +118,7 @@ void getCurrentScreenInfo(){
                             pw=false;
                         }else{
                             alarm->alarmOn();
-                            alarm->alarmTasks();
+                            
                         }
                     }while(pw);
                     pw=true;

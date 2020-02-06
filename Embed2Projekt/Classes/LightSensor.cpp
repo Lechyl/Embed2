@@ -15,21 +15,20 @@ LightSensor::LightSensor(PinName pin){
 float LightSensor::readLight()
 {
     AnalogIn lightSensor (_lightSensor);
-    float rms;
+    
     /// Sample 16hz and calculating the average
     for(int i = 0;i < 16;i++){
 
-        lightValue = lightSensor.read();
+        lightValue += lightSensor.read();
 
-       rms += lightValue * lightValue;
+      
        wait(0.0625);
         
     }
-    rms = rms/16;
-    rms = sqrt(rms);
     
+    lightValue = lightValue / 16;
     
-    isItDay = &rms >= &threshold ? true : false;
+    isItDay = lightValue >= threshold ? true : false;
 
-    return rms;
+    return lightValue;
 }

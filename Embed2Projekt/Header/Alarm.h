@@ -11,7 +11,7 @@ class Alarm{
     public:
         DigitalOut* Buzzer;
         Alarm(PinName pin);
-        void alarmOn(),alarmOff(),alarmTasks();
+        void alarmOn(),alarmOff();
         
     private:
         
