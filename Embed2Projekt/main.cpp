@@ -67,7 +67,7 @@ int main()
     lightSensor.readLight();
     
     
-    if(!lightSensor.isItDay){
+    if(lightSensor.isItDay){
         location=Locked;
     }
     
