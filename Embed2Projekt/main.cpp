@@ -65,18 +65,20 @@ void realTimeReadings(){
        rtLightValue = lightSensor.readLight();
        rtTempCValue = tempSensor.readTemperature(C);
 
-        if(rtSoundValue > soundSensor->threshold){
+        if(rtSoundValue > soundSensor->threshold && location == Information){
             BSP_LCD_DisplayStringAt(0,95, (uint8_t *)"Loud!",CENTER_MODE);
         }
         ///Read the light. Used to make sure it's day/night base on threshold
         lightSensor.threshold = 0.3;
         printf("sound %f  isitday %i\n",rtSoundValue,lightSensor.isItDay);
+        /*
         if(!lightSensor.isItDay && rtSoundValue >= soundSensor->threshold){
             screen->locked(location);
             location=Locked;
             alarm->alarmOn();
             printf("alarm on!\n");
         }
+        */
     }
 }
 void screenSettings(){
