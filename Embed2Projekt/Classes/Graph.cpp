@@ -5,28 +5,30 @@
 /**
 *
 *   @author: Long and Nilas
-*   @date: 21/1-20
-*   @brief: This is the Graph class whereI can init the graph diagram and draw the graph based on 3 diffrent values which has to be updated and run in a endless loop;
-*   
+*   @date: 01/2-20
+*   @brief: This is the Graph class where I can init the graph diagram and draw the graph based on 3 diffrent values which has to be updated and run in a endless loop;
 *
 */
 void Graph::clearDisplay(){
     BSP_LCD_Clear(LCD_COLOR_BLACK);
 }
 void Graph::initGraph(){
-    
+    ///Clear Display settings
     clearDisplay();
 
+    ///setting the default values
     oldXPos = 20;
     oldYPosSound = 250;
     oldYPosLight = 250;
     oldYPosTemp = 250;
+
+
+    ///Display settings
     uint8_t *text[30];
-    BSP_LCD_SetFont(&Font12);
-   
-    
-    BSP_LCD_SetTextColor(LCD_COLOR_RED);
     BSP_LCD_SetBackColor(LCD_COLOR_BLACK);
+    BSP_LCD_SetFont(&Font12);
+
+    BSP_LCD_SetTextColor(LCD_COLOR_RED);
     sprintf((char*)&text,"Sound Graph");
     BSP_LCD_DisplayStringAt(0, 1, (uint8_t*)&text, RIGHT_MODE);
 
@@ -37,7 +39,7 @@ void Graph::initGraph(){
     BSP_LCD_SetTextColor(LCD_COLOR_GREEN);
     sprintf((char*)&text,"Temperature Graph");
     BSP_LCD_DisplayStringAt(0, 24, (uint8_t*)&text, RIGHT_MODE);
-    
+
     /// Draw the Graph Diagram
     /// X Line
     BSP_LCD_SetTextColor(LCD_COLOR_BLUE);
@@ -47,7 +49,7 @@ void Graph::initGraph(){
     BSP_LCD_DrawLine(20, 40, 20, 250);
     BSP_LCD_SetTextColor(LCD_COLOR_BLUE);
 
-    /// draw graph side lines at each 10th place.
+    /// draw graph side lines for each 10th place.
     for(int i = 1;i < 10;i++){
 
         BSP_LCD_DrawLine(20,250 - 10 * i, 10, 250 - 10 * i);
@@ -68,7 +70,7 @@ void Graph::getGraph(int soundIn,int lightIn,int tempIn){
         oldYPosTemp = 250 - tempIn;
         
     }
-    ///Draw graph for each of the 3 parameters
+    ///Draw graph for each of the 3 input values
     for(int i = 0;i < 3;i++){
         switch(i){
             case 0:

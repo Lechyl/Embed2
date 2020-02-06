@@ -24,7 +24,15 @@ int Temperature::readTemperature(Type type){
     AnalogIn tempSensor (_tempSensor);
     DigitalOut ledHot (_ledForHotTemp);
     DigitalOut ledCold (_ledForColdTemp);
-    a = tempSensor.read_u16();
+    /// Sample 16hz and calculating the average
+    for(int i = 0;i < 16;i++){
+
+        a += tempSensor.read_u16();
+        
+        wait(0.0625);
+        
+    }
+    a = a/16;
 
     /// Calculate the resistance of the thermistor from analog voltage read.
     resistance = (float) 10000.0 * ((65536.0 / a) - 1.0);

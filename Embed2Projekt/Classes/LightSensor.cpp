@@ -20,14 +20,12 @@ float LightSensor::readLight()
     for(int i = 0;i < 16;i++){
 
         lightValue += lightSensor.read();
-
-      
-       wait(0.0625);
+        wait(0.0625);
         
     }
-    
     lightValue = lightValue / 16;
     
+    /// compare the lightValue to threshold a.k.a (min. value for day) to determine if it's concidered day or night.
     isItDay = lightValue >= threshold ? true : false;
 
     return lightValue;
