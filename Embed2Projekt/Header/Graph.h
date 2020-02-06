@@ -8,7 +8,7 @@
 class Graph{
 
     private:
-        int oldYPosSound,oldYPosLight,oldYPosTemp = 40;
+        int oldYPosSound,oldYPosLight,oldYPosTemp = 250;
         int oldXPos = 20;
 
         void clearDisplay();
