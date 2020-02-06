@@ -19,7 +19,7 @@ void Graph::initGraph(){
     BSP_LCD_DrawLine(20, 40, 20, 250);
     for(int i = 1;i < 4;i++){
 
-        BSP_LCD_DrawLine(20, 50 * i, 10, 50 * i);
+        BSP_LCD_DrawLine(20, 50 * i + 40, 10, 50 * i + 40);
         
     }
 }   
@@ -38,23 +38,26 @@ void Graph::getGraph(int soundIn,int lightIn,int tempIn){
     for(int i = 0;i < 3;i++){
         switch(i){
             case 0:
-                
+                soundIn +=40;
                 BSP_LCD_SetTextColor(LCD_COLOR_RED);
                 BSP_LCD_DrawLine(oldXPos, oldYPosSound, oldXPos +1, soundIn);
-                oldY = soundIn;
+                oldYPosSound = soundIn;
                 break;
             case 1:
-                BSP_LCD_SetTextColor(LCD_COLOR_RED);
-                BSP_LCD_DrawLine(oldXPos, oldY, oldXPos +1, lightIn);
-                oldY = soundIn;
+                lightIn +=40;
+
+                BSP_LCD_SetTextColor(LCD_COLOR_YELLOW);
+                BSP_LCD_DrawLine(oldXPos, oldYPosLight, oldXPos +1, lightIn);
+                oldYPosLight = lightIn;
                 break;
             case 2:
-                BSP_LCD_SetTextColor(LCD_COLOR_RED);
-                BSP_LCD_DrawLine(oldXPos, oldY, oldXPos +1, tempIn);
-                oldY = soundIn;
+                tempIn +=40;
+
+                BSP_LCD_SetTextColor(LCD_COLOR_GREEN);
+                BSP_LCD_DrawLine(oldXPos, oldYPosTemp, oldXPos +1,tempIn);
+                oldYPosTemp = tempIn;
                 break;
         }
     }
-
-    oldX++;
+    oldXPos++;
 }

@@ -53,9 +53,25 @@ void DisplayTime(){
     ThisThread::sleep_for(1000);
 }
 
-Graph graph;
+class Graph graph;
 int main()
 {   
+
+
+    BSP_LCD_Init();
+    BSP_LCD_LayerDefaultInit(LTDC_ACTIVE_LAYER, LCD_FB_START_ADDRESS);
+    BSP_LCD_SelectLayer(LTDC_ACTIVE_LAYER);
+    graph.initGraph();
+    while(true){
+       float read = soundSensor->readSound();
+       float read1 = lightSensor.readLight();
+       int read2 = tempSensor.readTemperature(C);
+        graph.getGraph((int)read,(int)read1,read2);
+       printf("%.2f",read);
+        
+
+    }
+    /* 
 
     int seconds = 0;
     //clockThread.start(DisplayTime);    
@@ -175,5 +191,5 @@ int main()
         }
         ThisThread::sleep_for(40); 
     }
-    
+    */
 }   

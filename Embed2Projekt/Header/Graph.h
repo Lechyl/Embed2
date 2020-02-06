@@ -12,8 +12,9 @@ class Graph{
         int oldXPos = 20;
 
         void clearDisplay();
-        void initGraph();
+        
     public:
+        void initGraph();
        void getGraph(int soundIn,int lightIn,int tempIn);
 };
 
