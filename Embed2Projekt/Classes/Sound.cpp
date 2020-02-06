@@ -31,8 +31,8 @@ float Sound::readSound(){
     /// RMS is a equation for average voltage waveform being read.
     /// Sample Sound to get a more accurate sound value     
 
-    /// Equation for getting the average rms
-    /// Sample sound 16 times in a second
+    /// Equation for getting the average rms a.k.a (average positive ac from my samples)
+    /// Sample sound 16 hz
     for(int i = 0;i < 16;i++){
 
        float read = soundSensor.read(); 
@@ -45,15 +45,15 @@ float Sound::readSound(){
  
     /// 3.3 is the input voltage being measured, and rms the reference level/Voltage being measured
     ///Equation for converting Voltage to dB
-    //printf("read %.2f \n",rms);
     float dB = 20 * log(3.3/rms);
     
     if(dB <= 0)
         dB = 0;
     
-
+    /// check if the dB is the highest yet 
     getHighScore = dB > getHighScore ? dB : getHighScore;
     
+    /// Check if dB is concidered loud by compare it to the threshold then increment counter
     getCounter = dB > threshold ? getCounter +1: getCounter;
     return dB;
 }
