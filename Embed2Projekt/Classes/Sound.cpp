@@ -46,7 +46,7 @@ float Sound::readSound(){
  
     /// 3.3 is the input voltage being measured, and rms the reference level/Voltage being measured
     ///Equation for converting Voltage to dB
-    printf("read %.2f \n",rms);
+    //printf("read %.2f \n",rms);
     float dB = 20 * log(3.3/rms);
     
     if(dB <= 0)

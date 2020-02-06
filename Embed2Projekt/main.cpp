@@ -11,7 +11,7 @@ Thread ScreenThread;
 #include "LightSensor.h"
 #include "EthernetClass.h"
 #include "Alarm.h"
-
+#include "Graph.h"
 // main() runs in its own thread in the OS
 
 
@@ -53,8 +53,21 @@ void DisplayTime(){
     ThisThread::sleep_for(1000);
 }
 
+Graph graph;
 int main()
 {   
+    BSP_LCD_Init();
+    BSP_LCD_LayerDefaultInit(LTDC_ACTIVE_LAYER, LCD_FB_START_ADDRESS);
+    BSP_LCD_SelectLayer(LTDC_ACTIVE_LAYER);
+    
+    while(true){
+       float read = soundSensor->readSound();
+        graph.getGraph((int)read);
+       printf("%.2f",read);
+        
+
+    }
+    /* 
     //clockThread.start(DisplayTime);    
      //sd.ReadPassword("123456");
     bool touches = true;
@@ -149,4 +162,5 @@ int main()
         }
         ThisThread::sleep_for(200); 
     }
+    */
 }   

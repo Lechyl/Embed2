@@ -6,7 +6,7 @@
 class LightSensor{
     private:
         PinName _lightSensor;
-
+        float lightValue;
     public:
         bool isItDay;
         float threshold;
