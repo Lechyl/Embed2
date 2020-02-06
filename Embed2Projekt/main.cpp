@@ -74,7 +74,7 @@ int main()
                 break;
             //Case screen load noises
             case 2:
-                screen->ScreenTwo();
+                screen->ScreenTwo(soundSensor->getCounter);
                 break;
             //Case screen locked
             case 3:
