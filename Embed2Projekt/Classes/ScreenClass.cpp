@@ -64,6 +64,7 @@ void Screen::ChangeColorScheme(uint32_t backgroundColor, uint32_t textColor){
 *   @brief: Error screen in case of an error
 */
 void Screen::ErrorScreen(){
+    BSP_LCD_Clear(LCD_COLOR_RED);
     Screen:ChangeColorScheme(LCD_COLOR_RED, LCD_COLOR_BLACK);
 
     BSP_LCD_DisplayStringAt(0,0, (uint8_t *)  "An error has occured. Please restart the device" , CENTER_MODE);
@@ -221,9 +222,9 @@ void Screen::ScreenOne(int temperature, float light, float sound){
     BSP_LCD_DisplayStringAt(0, LINE(2), (uint8_t *) stringValues , LEFT_MODE);
     sprintf(stringValues, "Sound: %.2f",sound);
     BSP_LCD_DisplayStringAt(0, LINE(3), (uint8_t *) stringValues , LEFT_MODE);
-    DrawSquare( 0, 100, 100,  40, (uint8_t *) "Noise");
-    DrawSquare( 0, 150, 100,  40, (uint8_t *) "Graph");
-    DrawSquare( 0, 200, 100,  40, (uint8_t *) "New Location");
+    DrawSquare( 0, 100, 100,  30, (uint8_t *) "Noise");
+    DrawSquare( 0, 150, 100,  30, (uint8_t *) "Graph");
+    DrawSquare( 0, 200, 220,  30, (uint8_t *) "New Location");
 
 
 }

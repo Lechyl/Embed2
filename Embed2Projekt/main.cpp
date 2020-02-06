@@ -87,23 +87,22 @@ void getCurrentScreenInfo(){
 
                 //Case screen information
                 case 1:
-                    if((0 < TS_State.touchX[0] &&  TS_State.touchX[0]< 100) && (100 < TS_State.touchY[0] &&  TS_State.touchY[0]< 140)){
+                    if((0 < TS_State.touchX[0] &&  TS_State.touchX[0]< 100) && (100 < TS_State.touchY[0] &&  TS_State.touchY[0]< 130)){
                         location = LoudInfo;
-                    }else if((0 < TS_State.touchX[0] &&  TS_State.touchX[0]< 100) && (150 < TS_State.touchY[0] &&  TS_State.touchY[0]< 190)){
-
-                    }else if((0 < TS_State.touchX[0] &&  TS_State.touchX[0]< 100) && (200 < TS_State.touchY[0] &&  TS_State.touchY[0]< 240)){
-                        location = LoudInfo;
+                    }else if((0 < TS_State.touchX[0] &&  TS_State.touchX[0]< 100) && (150 < TS_State.touchY[0] &&  TS_State.touchY[0]< 180)){
+                        location=Graph;
+                        graph.initGraph();
+                    }else if((0 < TS_State.touchX[0] &&  TS_State.touchX[0]< 220) && (200 < TS_State.touchY[0] &&  TS_State.touchY[0]< 230)){
+                        location = Location;
                     }
-                    seconds=25;
                     break;
                 //Case screen load noises
                 case 2:
                     if((0 < TS_State.touchX[0] &&  TS_State.touchX[0]< 100) && (100 < TS_State.touchY[0] &&  TS_State.touchY[0]< 150)){
                         soundSensor->getCounter = 0;
-                        seconds=25;
                     }else if((0 < TS_State.touchX[0] &&  TS_State.touchX[0]< 200) && (200 < TS_State.touchY[0] &&  TS_State.touchY[0]< 250)){
+                        soundSensor->getCounter = 100;
                         location = Information;
-                        seconds = 25;
                     }
                     break;
                 //Case screen locked
@@ -125,6 +124,7 @@ void getCurrentScreenInfo(){
 
                 //Graph
                 case 4:
+                    location=Information;
                     break;
                     
                 //Default error
@@ -132,15 +132,13 @@ void getCurrentScreenInfo(){
                     break;
             }
         }
-        ThisThread::sleep_for(40);
+        //ThisThread::sleep_for(40);
     }
 
 }
 void touchScreen(){
     //Change the screen based on location
     while(1){
-
-        if(seconds == 0){
             switch (location){
             //Case loading
             case 0:
@@ -149,32 +147,45 @@ void touchScreen(){
 
             //Case screen information
             case 1:
+            /*
+                soundSensor->readSound();
+                rtLightValue = lightSensor.readLight();
+                rtTempCValue = tempSensor.readTemperature(C); */
+                //screen->ScreenOne(tempSensor.readTemperature(C), lightSensor.readLight(), soundSensor->readSound());
                 screen->ScreenOne(rtTempCValue, rtLightValue, rtSoundValue);
+
                 break;
             //Case screen load noises
             case 2:
                 screen->ScreenTwo(soundSensor->getCounter);
+                location=LoudInfo;
                 break;
             //Case screen locked
             case 3:
                 screen->locked();
+                location=Locked;
                 break;
             //Case graph
             case 4:
                 //screen->graph();
+                location=Graph;
+                graph.getGraph(rtSoundValue, rtLightValue, rtTempCValue);
+                break;
+            case 5:
+                screen->GetLocationInfo();
+                location=Information;
                 break;
             //Default error
             default:
-                BSP_LCD_DisplayStringAtLine(LINE(2), (uint8_t *) "Error");
+                screen->ErrorScreen();
                 break;
 
             }
 
            // getCurrentScreenInfo();
-        }
-        ThisThread::sleep_for(500);
-    }
+            ThisThread::sleep_for(1000);
 
+        }
 }
 
 
@@ -186,11 +197,11 @@ int main()
     //clockThread.start(DisplayTime);    
      //sd.ReadPassword("123456");
 
-    screenSettings();
 
     /// thread for running all readings from sensors in real time and its logics
     Thread thread1;
     thread1.start(&realTimeReadings);
+    screenSettings();
 
     /// thread for running touch input in real time
     Thread thread2;
