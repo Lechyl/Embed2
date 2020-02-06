@@ -3,6 +3,7 @@
 #include "rtos.h"
 
 
+
 Thread ScreenThread;
 #include "SD.h"
 #include "Temperature.h"
@@ -12,6 +13,8 @@ Thread ScreenThread;
 #include "Alarm.h"
 
 // main() runs in its own thread in the OS
+
+
 
 //Different sensors
 Temperature tempSensor(A0,D2,D3);
