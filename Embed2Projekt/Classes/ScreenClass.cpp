@@ -139,27 +139,28 @@ void Screen::DrawSquare(uint16_t Xpos, uint16_t Ypos, uint16_t Width, uint16_t H
 void Screen::Keyboard(string inputText){
     text.clear();
     char button [2];
-    char * buttons = new char[4];
-    buttons[0]='n';buttons[1]='0';buttons[2]='y';
+    //X and Y position of the buton
     uint16_t xPos;
     uint16_t yPos;
+    //Create buttons 1-9. i is used for positioning of the buttons
     for(int i = 0;i < 9;i++){
         xPos = (40*(i%3))+150;
         yPos = 30*(i/3)+150;
         sprintf(button,"%d",i+1);
         DrawSquare(xPos, yPos,  30,  25, (uint8_t *)  button );
     }
-
+    //Draw the delete button
     int i = 9;
     DrawSquare((40*(i%3))+150, 30*(i/3)+150,  30,  25, (uint8_t *)  "n" );
-
+    //Cast 0 to char then draw the button
     i++;
     sprintf(button,"%d",0);
     DrawSquare((40*(i%3))+150, 30*(i/3)+150,  30,  25, (uint8_t *)  button );
+    
+    //Draw the accept button
     i++;
     DrawSquare((40*(i%3))+150, 30*(i/3)+150,  30,  25, (uint8_t *)  "y" );
     BSP_LCD_DisplayStringAt(100, LINE(5), (uint8_t *) (inputText).c_str(),LEFT_MODE);
-    ThisThread::sleep_for(100);
 
     while(1){
         BSP_TS_GetState(&TS_State);
@@ -197,7 +198,7 @@ void Screen::Keyboard(string inputText){
             }
             BSP_LCD_DisplayStringAt(100, LINE(5), (uint8_t *) (inputText+"                            ").c_str(), LEFT_MODE);
             BSP_LCD_DisplayStringAt(100, LINE(5), (uint8_t *) (inputText+ " "+text).c_str(), LEFT_MODE);
-            ThisThread::sleep_for(500);
+            ThisThread::sleep_for(200);
         }
     }
     BSP_LCD_Clear(LCD_COLOR_WHITE);
