@@ -17,6 +17,7 @@ Thread ScreenThread;
 
 
 //Different sensors
+InterruptIn button(D6);
 Temperature tempSensor(A0,D2,D3);
 Thread clockThread;
 Sound* soundSensor = new Sound(A1);
@@ -38,14 +39,15 @@ TS_StateTypeDef TS_State;
 enum UserLocation location;
 
 //Enum containing the temperature type
-enum Type type(C);
+
 
 
 float rtSoundValue;
 float rtLightValue;
 int rtTempCValue;
+int rtTempFValue;
 int seconds = 0;
-
+bool useCelcius = true;
 //Check if unlocked
 bool pw=true;
 
@@ -63,14 +65,21 @@ void realTimeReadings(){
     while(1){
        rtSoundValue = soundSensor->readSound();
        rtLightValue = lightSensor.readLight();
+
+       if(useCelcius){
        rtTempCValue = tempSensor.readTemperature(C);
+       }
+       else {
+       rtTempCValue = tempSensor.readTemperature(F);
+       }
+
+
 
         if(rtSoundValue > soundSensor->threshold && location == Information){
             BSP_LCD_DisplayStringAt(0,95, (uint8_t *)"Loud!",CENTER_MODE);
         }
         ///Read the light. Used to make sure it's day/night base on threshold
         lightSensor.threshold = 0.3;
-        printf("sound %f  isitday %i\n",rtSoundValue,lightSensor.isItDay);
         /*
         if(!lightSensor.isItDay && rtSoundValue >= soundSensor->threshold){
             screen->locked(location);
@@ -120,7 +129,7 @@ void getCurrentScreenInfo(){
                         location = Information;
                     }
                     break;
-                    
+
                 //Graph
                 case 4:
                     screen->ChangeColorScheme(LCD_COLOR_WHITE, LCD_COLOR_BLACK);
@@ -128,7 +137,7 @@ void getCurrentScreenInfo(){
                     screen->ScreenOne(rtTempCValue, rtLightValue, rtSoundValue, location);
                     location=Information;
                     break;
-                    
+
                 //Default error
                 default:
                     break;
@@ -148,7 +157,7 @@ void touchScreen(){
             switch (location){
             //Case loading
             case 0:
-                screen->LoadingScreen("Nilas og Long", "Work in progress");                
+                screen->LoadingScreen("Nilas og Long", "Work in progress");
                 break;
 
             //Case screen information
@@ -174,7 +183,7 @@ void touchScreen(){
                         alarm->alarmOff();
                         pw=false;
                     }
-                    
+
                 }while(pw);
                 pw=true;
                 location=Information;
@@ -198,23 +207,26 @@ void touchScreen(){
         }
 }
 
-
+void buttonInterrupt(){
+    useCelcius = !useCelcius;
+}
 int main()
-{        
+{
+    button.fall(&buttonInterrupt);
     //Set the default location
     location = Information;
 
-    clockThread.start(DisplayTime);    
+    clockThread.start(DisplayTime);
      //sd.ReadPassword("123456");
 
 
     /// thread for running all readings from sensors in real time and its logics
-    
+
     screenSettings();
     Thread thread1;
     thread1.start(&realTimeReadings);
 
-    
+
 
     /// thread for running touch input in real time
     Thread thread2;
@@ -224,7 +236,7 @@ int main()
     clockThread.start(&DisplayTime);
     while (true) {
 
-       // ThisThread::sleep_for(40); 
+       // ThisThread::sleep_for(40);
     }
-    
-}   
+
+}

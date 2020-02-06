@@ -87,7 +87,6 @@ bool SD::ReadPassword(string passwordIn){
             int size = fread(&buff[0], 1, 15, fd);
              fwrite(&buff[0], 1, size, stdout);
         }
-    printf(("password input = "+ passwordIn).c_str());
 
         ///Compare input and output password
         if(passwordIn.c_str() ==(string)&buff[0] ){

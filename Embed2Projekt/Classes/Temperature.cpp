@@ -33,8 +33,8 @@ int Temperature::readTemperature(Type type){
     
     _temperature=(1/((log(resistance/10000.0)/beta) + (1.0/298.15))); 
 
-            /// over home temp >= 24
-            ledHot = (_temperature - 273.15) >= 24 ? 1 : 0;
+            /// over home temp > 24
+            ledHot = (_temperature - 273.15) >= 25 ? 1 : 0;
 
             /// under home temp <= 21
             ledCold = (_temperature - 273.15) <= 21 ? 1 : 0;
