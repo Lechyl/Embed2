@@ -212,21 +212,31 @@ void Screen::Keyboard(string inputText){
 *   @param: light          Checks if the light is on
 *   @param: sound          Display sound in db
 */
-void Screen::ScreenOne(int temperature, float light, float sound){
-    BSP_LCD_Clear(LCD_COLOR_WHITE);
+
+void Screen::ScreenOne(int temperature, float light, float sound, UserLocation location){
+    if(location != 1){
+        BSP_LCD_Clear(LCD_COLOR_WHITE);
+        DrawSquare( 0, 100, 100,  30, (uint8_t *) "Noise");
+        DrawSquare( 0, 150, 100,  30, (uint8_t *) "Graph");
+        DrawSquare( 0, 200, 220,  30, (uint8_t *) "New Location");
+        BSP_LCD_DisplayStringAt(0, LINE(0  ), (uint8_t *) ("Bygning: "+building+" Lokale: "+room).c_str() , LEFT_MODE);
+    }
+
     char stringValues[20];
-    BSP_LCD_DisplayStringAt(0, LINE(0  ), (uint8_t *) ("Lokale: "+room).c_str() , LEFT_MODE);
+    
     sprintf(stringValues, "Temperatur: %d",temperature);
+    BSP_LCD_DisplayStringAtLine(LINE(1), (uint8_t *)"Temperatur:                  ");
+
     BSP_LCD_DisplayStringAt(0, LINE(1), (uint8_t *) stringValues , LEFT_MODE);
     sprintf(stringValues, "Light: %.2f",light);
+    BSP_LCD_DisplayStringAtLine(LINE(2), (uint8_t *)"Light:                    ");
+
     BSP_LCD_DisplayStringAt(0, LINE(2), (uint8_t *) stringValues , LEFT_MODE);
     sprintf(stringValues, "Sound: %.2f",sound);
+    BSP_LCD_DisplayStringAtLine(LINE(3), (uint8_t *)"Sound:                   ");
+
     BSP_LCD_DisplayStringAt(0, LINE(3), (uint8_t *) stringValues , LEFT_MODE);
-    DrawSquare( 0, 100, 100,  30, (uint8_t *) "Noise");
-    DrawSquare( 0, 150, 100,  30, (uint8_t *) "Graph");
-    DrawSquare( 0, 200, 220,  30, (uint8_t *) "New Location");
-
-
+    
 }
 
 void Screen::DisplayTime(char* time){
@@ -243,15 +253,21 @@ void Screen::DisplayTime(char* time){
 *   @brief: Screen containing the amount of high noise sounds
 *   @param: counter     Amount of times a high noise was heard
 */
-void Screen::ScreenTwo(int counter){
-    BSP_LCD_Clear(LCD_COLOR_WHITE);
+void Screen::ScreenTwo(int counter, UserLocation location){
+    if(location != 2){
+        BSP_LCD_Clear(LCD_COLOR_WHITE);
+
+        DrawSquare( 0, 100, 100,  50, (uint8_t *) "Reset");
+
+        DrawSquare( 0, 200, 200,  50, (uint8_t *) "Information");
+    }
     char stringValues[20];
     sprintf(stringValues, "Loud noises: %d",counter);
+    BSP_LCD_DisplayStringAtLine(LINE(0), (uint8_t *)"Loud noises:              ");
+
     BSP_LCD_DisplayStringAt(0, LINE(0), (uint8_t *) stringValues , LEFT_MODE);
 
-    DrawSquare( 0, 100, 100,  50, (uint8_t *) "Reset");
-
-    DrawSquare( 0, 200, 200,  50, (uint8_t *) "Information");
+   
 
 }
 
@@ -262,7 +278,9 @@ void Screen::ScreenTwo(int counter){
 *   @date: 21/1-20
 *   @brief: Show the locked screen
 */
-void Screen::locked(){
-    BSP_LCD_Clear(LCD_COLOR_WHITE);
-    BSP_LCD_DisplayStringAt(0, 0, (uint8_t *) "Device is locked", CENTER_MODE);
+void Screen::locked(UserLocation location){
+    if(location != 5){
+        BSP_LCD_Clear(LCD_COLOR_WHITE);
+        BSP_LCD_DisplayStringAt(0, 0, (uint8_t *) "Device is locked", CENTER_MODE);
+    }
 }

@@ -91,12 +91,14 @@ void getCurrentScreenInfo(){
                 //Case screen information
                 case 1:
                     if((0 < TS_State.touchX[0] &&  TS_State.touchX[0]< 100) && (100 < TS_State.touchY[0] &&  TS_State.touchY[0]< 130)){
+                        screen->ScreenTwo(soundSensor->getCounter, location);
                         location = LoudInfo;
                     }else if((0 < TS_State.touchX[0] &&  TS_State.touchX[0]< 100) && (150 < TS_State.touchY[0] &&  TS_State.touchY[0]< 180)){
-                        location=Graph;
                         graph.initGraph();
+                        location=Graph;
                     }else if((0 < TS_State.touchX[0] &&  TS_State.touchX[0]< 220) && (200 < TS_State.touchY[0] &&  TS_State.touchY[0]< 230)){
                         location = Location;
+                        screen->GetLocationInfo();
                     }
                     break;
                 //Case screen load noises
@@ -104,7 +106,7 @@ void getCurrentScreenInfo(){
                     if((0 < TS_State.touchX[0] &&  TS_State.touchX[0]< 100) && (100 < TS_State.touchY[0] &&  TS_State.touchY[0]< 150)){
                         soundSensor->getCounter = 0;
                     }else if((0 < TS_State.touchX[0] &&  TS_State.touchX[0]< 200) && (200 < TS_State.touchY[0] &&  TS_State.touchY[0]< 250)){
-                        soundSensor->getCounter = 100;
+                        screen->ScreenOne(rtTempCValue, rtLightValue, rtSoundValue, location);
                         location = Information;
                     }
                     break;
@@ -127,7 +129,8 @@ void getCurrentScreenInfo(){
 
                 //Graph
                 case 4:
-                    location=Information;
+                    screen->ScreenOne(rtTempCValue, rtLightValue, rtSoundValue, location);
+                    location=Location;
                     break;
                     
                 //Default error
@@ -141,11 +144,13 @@ void getCurrentScreenInfo(){
 }
 void touchScreen(){
     //Change the screen based on location
+    screen->ScreenOne(rtTempCValue, rtLightValue, rtSoundValue, Location);
+    ThisThread::sleep_for(500);
     while(1){
             switch (location){
             //Case loading
             case 0:
-                screen->LoadingScreen("Nilas og Long", "Work in progress");
+                screen->LoadingScreen("Nilas og Long", "Work in progress");                
                 break;
 
             //Case screen information
@@ -155,28 +160,23 @@ void touchScreen(){
                 rtLightValue = lightSensor.readLight();
                 rtTempCValue = tempSensor.readTemperature(C); */
                 //screen->ScreenOne(tempSensor.readTemperature(C), lightSensor.readLight(), soundSensor->readSound());
-                screen->ScreenOne(rtTempCValue, rtLightValue, rtSoundValue);
-
+                screen->ScreenOne(rtTempCValue, rtLightValue, rtSoundValue,location);
                 break;
             //Case screen load noises
             case 2:
-                screen->ScreenTwo(soundSensor->getCounter);
-                location=LoudInfo;
+                screen->ScreenTwo(soundSensor->getCounter, location);
                 break;
             //Case screen locked
             case 3:
                 screen->locked();
-                location=Locked;
                 break;
             //Case graph
             case 4:
                 //screen->graph();
-                location=Graph;
                 graph.getGraph(rtSoundValue, rtLightValue, rtTempCValue);
                 break;
             case 5:
-                screen->GetLocationInfo();
-                location=Information;
+                //screen->GetLocationInfo();
                 break;
             //Default error
             default:

@@ -40,8 +40,8 @@ class Screen{
 
         void Keyboard(string inputText);
 
-        void ScreenOne(int temperature, float light, float sound);
-        void ScreenTwo(int counter);
+        void ScreenOne(int temperature, float light, float sound,UserLocation location);
+        void ScreenTwo(int counter, UserLocation location);
 
         void DisplayTime(char* time);
 
