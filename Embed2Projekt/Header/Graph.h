@@ -1,7 +1,7 @@
 #ifndef GRAPH_TOKEN
 #define GRAPH_TOKEN
 
-#include "Graph.h"
+#include "mbed.h"
 
 #include "stm32746g_discovery_lcd.h"
 
