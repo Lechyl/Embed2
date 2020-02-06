@@ -25,3 +25,7 @@ void Alarm::alarmOff(){
     *Buzzer = 0;
 }
 
+bool Alarm::getTurnOnAlarm(){
+    return turnOnAlarm;
+}
+

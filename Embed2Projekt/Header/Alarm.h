@@ -12,6 +12,7 @@ class Alarm{
         DigitalOut* Buzzer;
         Alarm(PinName pin);
         void alarmOn(),alarmOff();
+        bool getTurnOnAlarm();
         
     private:
         

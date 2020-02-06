@@ -48,8 +48,7 @@ int rtTempCValue;
 int rtTempFValue;
 int seconds = 0;
 bool useCelcius = true;
-//Check if unlocked
-bool pw=true;
+
 
 Thread screenThread;
 
@@ -77,6 +76,8 @@ void realTimeReadings(){
 
         if(rtSoundValue > soundSensor->threshold && location == Information){
             BSP_LCD_DisplayStringAt(0,95, (uint8_t *)"Loud!",CENTER_MODE);
+        }else{
+            BSP_LCD_DisplayStringAt(0,95, (uint8_t *)"     ",CENTER_MODE);
         }
         ///Read the light. Used to make sure it's day/night base on threshold
         lightSensor.threshold = 0.3;
@@ -94,7 +95,7 @@ void screenSettings(){
     //Get room number
     screen->LoadingScreen("Nilas og Long", "Work in progress");
 }
-void getCurrentScreenInfo(){
+void TouchScreen(){
     while(1){
         //Run while loop checking for touch input
         BSP_TS_GetState(&TS_State);
@@ -104,7 +105,6 @@ void getCurrentScreenInfo(){
                 case 0:
                     screen->LoadingScreen("Nilas og Long", "Work in progress");
                     break;
-
                 //Case screen information
                 case 1:
                     if((0 < TS_State.touchX[0] &&  TS_State.touchX[0]< 100) && (100 < TS_State.touchY[0] &&  TS_State.touchY[0]< 130)){
@@ -137,74 +137,63 @@ void getCurrentScreenInfo(){
                     screen->ScreenOne(rtTempCValue, rtLightValue, rtSoundValue, location);
                     location=Information;
                     break;
-
                 //Default error
                 default:
                     break;
             }
-            ThisThread::sleep_for(100);
-
+            ThisThread::sleep_for(40);
         }
     }
-
 }
-void touchScreen(){
+void RefreshPage(){
     //Change the screen based on location
-    screen->ScreenOne(rtTempCValue, rtLightValue, rtSoundValue, Location);
-    ThisThread::sleep_for(500);
-
     while(1){
-            switch (location){
-            //Case loading
-            case 0:
-                screen->LoadingScreen("Nilas og Long", "Work in progress");
-                break;
-
-            //Case screen information
-            case 1:
-            /*
-                soundSensor->readSound();
-                rtLightValue = lightSensor.readLight();
-                rtTempCValue = tempSensor.readTemperature(C); */
-                //screen->ScreenOne(tempSensor.readTemperature(C), lightSensor.readLight(), soundSensor->readSound());
-                screen->ScreenOne(rtTempCValue, rtLightValue, rtSoundValue,location);
-                break;
-            //Case screen load noises
-            case 2:
-                screen->ScreenTwo(soundSensor->getCounter, location);
-                break;
-            //Case screen locked
-            case 3:
-                do{
-                    screen->locked(location);
-                    screen->Keyboard("Password:");
-                    if(sd.ReadPassword(screen->text)){
-                        location=Information;
-                        alarm->alarmOff();
-                        pw=false;
-                    }
-
-                }while(pw);
-                pw=true;
-                location=Information;
-            //Case graph
-            case 4:
-                graph.getGraph(rtSoundValue, rtLightValue, rtTempCValue);
-                break;
-            case 5:
-                //screen->GetLocationInfo();
-                break;
-            //Default error
-            default:
-                screen->ErrorScreen();
-                break;
-
-            }
-
-           // getCurrentScreenInfo();
-            ThisThread::sleep_for(1000);
-
+        switch (location){
+        //Case loading
+        case 0:
+            screen->LoadingScreen("Long Og Nias", "Embedded 2");
+            break;
+        //Case screen information
+        case 1:
+            screen->ScreenOne(rtTempCValue, rtLightValue, rtSoundValue,location);
+            break;
+        //Case screen load noises
+        case 2:
+            screen->ScreenTwo(soundSensor->getCounter, location);
+            break;
+        //Case screen locked
+        case 3:
+            do{
+                //Refresh the screen
+                screen->locked(location);
+                //Show the keyboard
+                screen->Keyboard("Password:");
+                //After the password has been typed in, compare it to the password on the SD card
+                if(sd.ReadPassword(screen->text)){
+                    //If it's correct, turn off the alarm otherwise sleep against brute force attack
+                    alarm->alarmOff();
+                }else{
+                    ThisThread::sleep_for(2000);
+                }
+                //Continue until alarm has been turned off
+            }while(alarm->getTurnOnAlarm());
+            //Go back to information and set the correct Location
+            screen->ScreenOne(rtTempCValue, rtLightValue, rtSoundValue,location);
+            location=Information;
+        //Case graph
+        case 4:
+            graph.getGraph(rtSoundValue, rtLightValue, rtTempCValue);
+            break;
+        case 5:
+            //screen->GetLocationInfo();
+            break;
+        //Default error
+        default:
+            screen->ErrorScreen();
+            break;
         }
+        ThisThread::sleep_for(200);
+    }
 }
 
 void buttonInterrupt(){
@@ -216,27 +205,28 @@ int main()
     //Set the default location
     location = Information;
 
-    clockThread.start(DisplayTime);
-     //sd.ReadPassword("123456");
-
+    //Setup the screen
+    screenSettings();
 
     /// thread for running all readings from sensors in real time and its logics
 
-    screenSettings();
     Thread thread1;
     thread1.start(&realTimeReadings);
 
 
+    screen->ScreenOne(rtTempCValue, rtLightValue, rtSoundValue, Location);
 
     /// thread for running touch input in real time
     Thread thread2;
-    thread2.start(&touchScreen);
+    thread2.start(&RefreshPage);
+
+    //Thread for handling all touch events
     Thread thread3;
-    thread3.start(&getCurrentScreenInfo);
+    thread3.start(&TouchScreen);
+
+    //Thread for printing the time to the screen
     clockThread.start(&DisplayTime);
     while (true) {
-
-       // ThisThread::sleep_for(40);
     }
 
 }
