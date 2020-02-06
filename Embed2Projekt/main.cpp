@@ -53,9 +53,11 @@ Thread screenThread;
 
 void DisplayTime(){
     time_t timeNow = ethernet.GetTime();
-    BSP_LCD_DisplayStringAt(0, 280, (uint8_t *) ctime(&timeNow), RIGHT_MODE);
-    timeNow+=1;
-    ThisThread::sleep_for(1000);
+    while(1){
+        BSP_LCD_DisplayStringAt(0, 280, (uint8_t *) ctime(&timeNow), RIGHT_MODE);
+        timeNow+=1;
+        ThisThread::sleep_for(1000);
+    }
 }
 void realTimeReadings(){
     while(1){
@@ -63,7 +65,9 @@ void realTimeReadings(){
        rtLightValue = lightSensor.readLight();
        rtTempCValue = tempSensor.readTemperature(C);
 
-
+        if(rtSoundValue > soundSensor->threshold){
+            BSP_LCD_DisplayStringAt(0,95, (uint8_t *)"Loud!",CENTER_MODE);
+        }
         ///Read the light. Used to make sure it's day/night base on threshold
         lightSensor.threshold = 0.3;
         printf("sound %f  isitday %i\n",rtSoundValue,lightSensor.isItDay);
@@ -76,7 +80,6 @@ void realTimeReadings(){
     }
 }
 void screenSettings(){
-
     //Get room number
     screen->LoadingScreen("Nilas og Long", "Work in progress");
 }
@@ -97,8 +100,10 @@ void getCurrentScreenInfo(){
                         screen->ScreenTwo(soundSensor->getCounter, location);
                         location = LoudInfo;
                     }else if((0 < TS_State.touchX[0] &&  TS_State.touchX[0]< 100) && (150 < TS_State.touchY[0] &&  TS_State.touchY[0]< 180)){
+                        BSP_LCD_Clear(LCD_COLOR_BLACK);
                         graph.initGraph();
                         location=Graph;
+
                     }else if((0 < TS_State.touchX[0] &&  TS_State.touchX[0]< 220) && (200 < TS_State.touchY[0] &&  TS_State.touchY[0]< 230)){
                         location = Location;
                         screen->GetLocationInfo();
@@ -116,16 +121,19 @@ void getCurrentScreenInfo(){
                     
                 //Graph
                 case 4:
+                    screen->ChangeColorScheme(LCD_COLOR_WHITE, LCD_COLOR_BLACK);
+                    BSP_LCD_SetFont(&Font16);
                     screen->ScreenOne(rtTempCValue, rtLightValue, rtSoundValue, location);
-                    location=Location;
+                    location=Information;
                     break;
                     
                 //Default error
                 default:
                     break;
             }
+            ThisThread::sleep_for(100);
+
         }
-        //ThisThread::sleep_for(40);
     }
 
 }
@@ -170,7 +178,6 @@ void touchScreen(){
                 location=Information;
             //Case graph
             case 4:
-                //screen->graph();
                 graph.getGraph(rtSoundValue, rtLightValue, rtTempCValue);
                 break;
             case 5:
@@ -195,7 +202,7 @@ int main()
     //Set the default location
     location = Information;
 
-    //clockThread.start(DisplayTime);    
+    clockThread.start(DisplayTime);    
      //sd.ReadPassword("123456");
 
 
@@ -212,7 +219,7 @@ int main()
     thread2.start(&touchScreen);
     Thread thread3;
     thread3.start(&getCurrentScreenInfo);
-    clockThread.start(&DisplayTime());
+    clockThread.start(&DisplayTime);
     while (true) {
 
        // ThisThread::sleep_for(40); 
