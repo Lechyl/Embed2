@@ -37,10 +37,10 @@ else{
 */
 void Screen::GetLocationInfo(){
     BSP_LCD_Clear(BSP_LCD_GetBackColor());
-    Keyboard("Building");
+    Keyboard("Building: ");
     building = text;
     ThisThread::sleep_for(200);
-    Keyboard("Room Number");
+    Keyboard("Room Number: ");
     room=text;
 
 }
@@ -158,7 +158,7 @@ void Screen::Keyboard(string inputText){
     DrawSquare((40*(i%3))+150, 30*(i/3)+150,  30,  25, (uint8_t *)  button );
     i++;
     DrawSquare((40*(i%3))+150, 30*(i/3)+150,  30,  25, (uint8_t *)  "y" );
-    BSP_LCD_DisplayStringAt(100, LINE(5), (uint8_t *) (inputText+": ").c_str(),LEFT_MODE);
+    BSP_LCD_DisplayStringAt(100, LINE(5), (uint8_t *) (inputText).c_str(),LEFT_MODE);
     ThisThread::sleep_for(100);
 
     while(1){
@@ -195,7 +195,7 @@ void Screen::Keyboard(string inputText){
                     break;
                 }
             }
-            BSP_LCD_DisplayStringAt(100, LINE(5), (uint8_t *) "                                    ", LEFT_MODE);
+            BSP_LCD_DisplayStringAt(100, LINE(5), (uint8_t *) (inputText+"                            ").c_str(), LEFT_MODE);
             BSP_LCD_DisplayStringAt(100, LINE(5), (uint8_t *) (inputText+ " "+text).c_str(), LEFT_MODE);
             ThisThread::sleep_for(500);
         }
@@ -279,8 +279,10 @@ void Screen::ScreenTwo(int counter, UserLocation location){
 *   @brief: Show the locked screen
 */
 void Screen::locked(UserLocation location){
-    if(location != 5){
+    if(location != 3){
         BSP_LCD_Clear(LCD_COLOR_WHITE);
-        BSP_LCD_DisplayStringAt(0, 0, (uint8_t *) "Device is locked", CENTER_MODE);
     }
+    BSP_LCD_DisplayStringAt(0, 0, (uint8_t *) "Device is locked", CENTER_MODE);
+
+
 }

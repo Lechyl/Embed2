@@ -28,7 +28,7 @@ SD sd;
 Screen* screen = new Screen();
 
 //Object to get the time via ethernet
-Ethernet net;
+Ethernet ethernet;
 
 //Graph object to draw graph
 class Graph graph;
@@ -52,8 +52,10 @@ bool pw=true;
 Thread screenThread;
 
 void DisplayTime(){
-    //screen->DisplayTime(net.GetTime());
-    //ThisThread::sleep_for(1000);
+    time_t timeNow = ethernet.GetTime();
+    BSP_LCD_DisplayStringAt(0, 280, (uint8_t *) ctime(&timeNow), RIGHT_MODE);
+    timeNow+=1;
+    ThisThread::sleep_for(1000);
 }
 void realTimeReadings(){
     while(1){
@@ -66,6 +68,7 @@ void realTimeReadings(){
         lightSensor.threshold = 0.3;
         printf("sound %f  isitday %i\n",rtSoundValue,lightSensor.isItDay);
         if(!lightSensor.isItDay && rtSoundValue >= soundSensor->threshold){
+            screen->locked(location);
             location=Locked;
             alarm->alarmOn();
             printf("alarm on!\n");
@@ -110,23 +113,7 @@ void getCurrentScreenInfo(){
                         location = Information;
                     }
                     break;
-                //Case screen locked
-                case 3:
-                    do{
-                        screen->Keyboard("Password");
-                        if(sd.ReadPassword(screen->text)){
-                            location=Information;
-                            alarm->alarmOff();
-                            pw=false;
-                        }else{
-                            alarm->alarmOn();
-                            
-                        }
-                    }while(pw);
-                    pw=true;
-                    seconds=25;                    
-                    break;
-
+                    
                 //Graph
                 case 4:
                     screen->ScreenOne(rtTempCValue, rtLightValue, rtSoundValue, location);
@@ -146,6 +133,7 @@ void touchScreen(){
     //Change the screen based on location
     screen->ScreenOne(rtTempCValue, rtLightValue, rtSoundValue, Location);
     ThisThread::sleep_for(500);
+
     while(1){
             switch (location){
             //Case loading
@@ -168,8 +156,18 @@ void touchScreen(){
                 break;
             //Case screen locked
             case 3:
-                screen->locked(location);
-                break;
+                do{
+                    screen->locked(location);
+                    screen->Keyboard("Password:");
+                    if(sd.ReadPassword(screen->text)){
+                        location=Information;
+                        alarm->alarmOff();
+                        pw=false;
+                    }
+                    
+                }while(pw);
+                pw=true;
+                location=Information;
             //Case graph
             case 4:
                 //screen->graph();
@@ -202,16 +200,19 @@ int main()
 
 
     /// thread for running all readings from sensors in real time and its logics
+    
+    screenSettings();
     Thread thread1;
     thread1.start(&realTimeReadings);
-    screenSettings();
+
+    
 
     /// thread for running touch input in real time
     Thread thread2;
     thread2.start(&touchScreen);
     Thread thread3;
     thread3.start(&getCurrentScreenInfo);
-
+    clockThread.start(&DisplayTime());
     while (true) {
 
        // ThisThread::sleep_for(40); 
