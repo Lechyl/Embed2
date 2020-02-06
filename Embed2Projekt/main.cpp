@@ -19,7 +19,6 @@ Thread ScreenThread;
 //Different sensors
 InterruptIn button(D6);
 Temperature tempSensor(A0,D2,D3);
-Thread clockThread;
 Sound* soundSensor = new Sound(A1);
 LightSensor lightSensor(A2);
 
@@ -53,10 +52,14 @@ bool useCelcius = true;
 Thread screenThread;
 
 void DisplayTime(){
+    char buffer[32];
     time_t timeNow = ethernet.GetTime();
     while(1){
-        BSP_LCD_DisplayStringAt(0, 280, (uint8_t *) ctime(&timeNow), RIGHT_MODE);
-        timeNow+=1;
+        time_t seconds = time(NULL);
+ 
+        char buffer[32];
+        strftime(buffer, 32, "%I:%M %p\n", localtime(&seconds));
+        BSP_LCD_DisplayStringAt(0, BSP_LCD_GetYSize(), (uint8_t *) buffer,RIGHT_MODE);
         ThisThread::sleep_for(1000);
     }
 }
@@ -118,6 +121,8 @@ void TouchScreen(){
                     }else if((0 < TS_State.touchX[0] &&  TS_State.touchX[0]< 220) && (200 < TS_State.touchY[0] &&  TS_State.touchY[0]< 230)){
                         location = Location;
                         screen->GetLocationInfo();
+                        screen->ScreenOne(rtTempCValue, rtLightValue, rtSoundValue, location);
+                        location=Information;
                     }
                     break;
                 //Case screen load noises
@@ -185,7 +190,6 @@ void RefreshPage(){
             graph.getGraph(rtSoundValue, rtLightValue, rtTempCValue);
             break;
         case 5:
-            //screen->GetLocationInfo();
             break;
         //Default error
         default:
@@ -204,6 +208,9 @@ int main()
     button.fall(&buttonInterrupt);
     //Set the default location
     location = Information;
+
+    Thread clockThread;
+    clockThread.start(&DisplayTime);
 
     //Setup the screen
     screenSettings();
@@ -225,7 +232,6 @@ int main()
     thread3.start(&TouchScreen);
 
     //Thread for printing the time to the screen
-    clockThread.start(&DisplayTime);
     while (true) {
     }
 

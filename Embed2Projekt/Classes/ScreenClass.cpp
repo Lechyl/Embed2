@@ -267,6 +267,10 @@ void Screen::ScreenTwo(int counter, UserLocation location, float highScore){
     BSP_LCD_DisplayStringAtLine(LINE(0), (uint8_t *)"Loud noises:              ");
 
     BSP_LCD_DisplayStringAt(0, LINE(0), (uint8_t *) stringValues , LEFT_MODE);
+    sprintf(stringValues, "High Score: %2.f",highScore);
+    BSP_LCD_DisplayStringAtLine(LINE(1), (uint8_t *)"High Score:              ");
+
+    BSP_LCD_DisplayStringAt(0,LINE(1), (uint8_t *) stringValues, LEFT_MODE);
 
    
 
