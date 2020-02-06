@@ -37,7 +37,11 @@ else{
 */
 void Screen::GetLocationInfo(){
     BSP_LCD_Clear(BSP_LCD_GetBackColor());
+    Keyboard("Building");
+    building = text;
     Keyboard("Room Number");
+    room=text;
+
 }
 /**
 *
@@ -152,7 +156,7 @@ void Screen::Keyboard(string inputText){
     DrawSquare((40*(i%3))+150, 30*(i/3)+150,  30,  25, (uint8_t *)  button );
     i++;
     DrawSquare((40*(i%3))+150, 30*(i/3)+150,  30,  25, (uint8_t *)  "y" );
-    BSP_LCD_DisplayStringAt(100, LINE(5), (uint8_t *) "Lokale: ",LEFT_MODE);
+    BSP_LCD_DisplayStringAt(100, LINE(5), (uint8_t *) (inputText+": ").c_str(),LEFT_MODE);
     ThisThread::sleep_for(100);
 
     while(1){
@@ -201,27 +205,28 @@ void Screen::Keyboard(string inputText){
 *
 *   @author:  Nilas
 *   @date: 21/1-20
-*   @brief: Screen containing sensor information and time
+*   @brief: Screen containing sensor information 
 *   @param: temperature    Temperature in the room
 *   @param: light          Checks if the light is on
 *   @param: sound          Display sound in db
-*   @param: time           Timestamp     since 1. January 1970 in seconds
-
 */
-void Screen::ScreenOne(int temperature, float light, float sound, time_t* time){
+void Screen::ScreenOne(int temperature, float light, float sound){
     char stringValues[20];
-    BSP_LCD_DisplayStringAt(0, LINE(0  ), (uint8_t *) ("Lokale: "+text).c_str() , LEFT_MODE);
+    BSP_LCD_DisplayStringAt(0, LINE(0  ), (uint8_t *) ("Lokale: "+room).c_str() , LEFT_MODE);
     sprintf(stringValues, "Temperatur: %d",temperature);
+    BSP_LCD_DisplayStringAt(0, LINE(1), (uint8_t *) stringValues , LEFT_MODE);
+    sprintf(stringValues, "Light: %.2f",light);
     BSP_LCD_DisplayStringAt(0, LINE(2), (uint8_t *) stringValues , LEFT_MODE);
-    sprintf(stringValues, "Light: %f.2f",light);
-    BSP_LCD_DisplayStringAt(0, LINE(4), (uint8_t *) stringValues , LEFT_MODE);
-    sprintf(stringValues, "Sound: %f.2f",sound);
-    BSP_LCD_DisplayStringAt(0, LINE(6), (uint8_t *) stringValues , LEFT_MODE);
-    sprintf(stringValues, "Time: %s",ctime(time));
-    BSP_LCD_DisplayStringAt(0, LINE(8), (uint8_t *) stringValues , LEFT_MODE);
+    sprintf(stringValues, "Sound: %.2f",sound);
+    BSP_LCD_DisplayStringAt(0, LINE(3), (uint8_t *) stringValues , LEFT_MODE);
     DrawSquare( 0, 200, 50,  50, (uint8_t *) "Loud noise");
 }
 
+void Screen::DisplayTime(char* time){
+    BSP_LCD_DisplayStringAt(0, 0, (uint8_t *) "          ", RIGHT_MODE);
+
+    BSP_LCD_DisplayStringAt(0, 0, (uint8_t *) time, RIGHT_MODE);
+}
 
 
 /**
@@ -243,6 +248,14 @@ void Screen::ScreenTwo(int counter){
 
 }
 
-/*
-Screen 3
+
+/**
+*
+*   @author:  Nilas
+*   @date: 21/1-20
+*   @brief: Show the locked screen
 */
+void Screen::locked(){
+    BSP_LCD_Clear(LCD_COLOR_WHITE);
+    BSP_LCD_DisplayStringAt(0, 0, (uint8_t *) "Device is locked", CENTER_MODE);
+}

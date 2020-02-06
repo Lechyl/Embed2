@@ -17,6 +17,8 @@ class Screen{
         uint8_t yLength;
         uint8_t status;
         char* buttons;
+        string room;
+        string building;
 
 
     public:
@@ -38,9 +40,10 @@ class Screen{
 
         void Keyboard(string inputText);
 
-        void ScreenOne(int temperature, float light, float sound, time_t* time);
-
+        void ScreenOne(int temperature, float light, float sound);
         void ScreenTwo(int counter);
+
+        void DisplayTime(char* time);
 
         void locked();
 
