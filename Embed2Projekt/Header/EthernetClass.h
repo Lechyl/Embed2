@@ -4,6 +4,7 @@
 #include "mbed.h"
 #include "EthernetInterface.h"
 #include "ntp-client/NTPClient.h"
+//#include "time.h"
 
 
 class Ethernet{
@@ -11,7 +12,7 @@ class Ethernet{
     public:
         Ethernet();
         ~Ethernet();
-        time_t getTime();
+        char* GetTime();
 
 };
 #endif
