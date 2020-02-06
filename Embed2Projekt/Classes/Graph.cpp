@@ -2,27 +2,41 @@
 
 
 
+/**
+*
+*   @author: Long and Nilas
+*   @date: 21/1-20
+*   @brief: This is the Graph class whereI can init the graph diagram and draw the graph based on 3 diffrent values which has to be updated and run in a endless loop;
+*   
+*
+*/
 void Graph::clearDisplay(){
     BSP_LCD_Clear(LCD_COLOR_BLACK);
 }
 void Graph::initGraph(){
     
     clearDisplay();
+
+    oldXPos = 20;
+    oldYPosSound = 250;
+    oldYPosLight = 250;
+    oldYPosTemp = 250;
     uint8_t *text[30];
     BSP_LCD_SetFont(&Font12);
    
     
     BSP_LCD_SetTextColor(LCD_COLOR_RED);
+    BSP_LCD_SetBackColor(LCD_COLOR_BLACK);
     sprintf((char*)&text,"Sound Graph");
-    BSP_LCD_DisplayStringAt(470, 260, (uint8_t*)&text, LEFT_MODE);
+    BSP_LCD_DisplayStringAt(0, 1, (uint8_t*)&text, RIGHT_MODE);
 
      BSP_LCD_SetTextColor(LCD_COLOR_YELLOW);
     sprintf((char*)&text,"Light Graph");
-    BSP_LCD_DisplayStringAt(450, 260, (uint8_t*)&text, LEFT_MODE);
+    BSP_LCD_DisplayStringAt(0, 12, (uint8_t*)&text, RIGHT_MODE);
 
     BSP_LCD_SetTextColor(LCD_COLOR_GREEN);
     sprintf((char*)&text,"Temperature Graph");
-    BSP_LCD_DisplayStringAt(430, 260, (uint8_t*)&text, LEFT_MODE);
+    BSP_LCD_DisplayStringAt(0, 24, (uint8_t*)&text, RIGHT_MODE);
     /// Draw the Graph Diagram
     
     /// X Line
@@ -43,14 +57,15 @@ void Graph::initGraph(){
 void Graph::getGraph(int soundIn,int lightIn,int tempIn){
     
 
-    if(oldXPos >= 40){
+    if(oldXPos >= 450){
         initGraph();
-        oldXPos = 20;
-        oldYPosSound = 40;
-        oldYPosLight = 40;
-        oldYPosTemp = 40;
     }
-
+    if(oldXPos == 20){
+        oldYPosSound = 250 -soundIn;
+        oldYPosLight = 250 - lightIn;
+        oldYPosTemp = 250 - tempIn;
+        
+    }
     ///Draw graph
     for(int i = 0;i < 3;i++){
         switch(i){
