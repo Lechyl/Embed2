@@ -165,7 +165,7 @@ void touchScreen(){
                 break;
             //Case screen locked
             case 3:
-                screen->locked();
+                screen->locked(location);
                 break;
             //Case graph
             case 4:

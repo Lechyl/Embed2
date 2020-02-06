@@ -45,7 +45,7 @@ class Screen{
 
         void DisplayTime(char* time);
 
-        void locked();
+        void locked(UserLocation location);
 
 };  
 #endif
