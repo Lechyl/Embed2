@@ -43,7 +43,6 @@ float rtSoundValue;
 float rtLightValue;
 int rtTempCValue;
 int seconds = 0;
-bool touches = true;
 
 //Check if unlocked
 bool pw=true;
@@ -65,9 +64,9 @@ void realTimeReadings(){
         ///Read the light. Used to make sure it's day/night base on threshold
         lightSensor.threshold = 0.01;
     
-        if(lightSensor.isItDay){
+        /*if(lightSensor.isItDay){
             location=Locked;
-        }
+        }*/
     }
 }
 void screenSettings(){
@@ -77,14 +76,6 @@ void screenSettings(){
 }
 void getCurrentScreenInfo(){
     while(1){
-
-        touches = true;
-        if(seconds == 25){
-            seconds =0;
-        }else{
-            seconds++;
-        }
-
         //Run while loop checking for touch input
         BSP_TS_GetState(&TS_State);
         if(TS_State.touchDetected){
@@ -96,9 +87,13 @@ void getCurrentScreenInfo(){
 
                 //Case screen information
                 case 1:
-                    if((0 < TS_State.touchX[0] &&  TS_State.touchX[0]< 100) && (200 < TS_State.touchY[0] &&  TS_State.touchY[0]< 250)){
+                    if((0 < TS_State.touchX[0] &&  TS_State.touchX[0]< 100) && (100 < TS_State.touchY[0] &&  TS_State.touchY[0]< 140)){
                         location = LoudInfo;
-                    }else if((0 < TS_State.touchX[0] &&  TS_State.touchX[0]< 100) && (300 < TS_State.touchY[0] &&  TS_State.touchY[0]< 350))
+                    }else if((0 < TS_State.touchX[0] &&  TS_State.touchX[0]< 100) && (150 < TS_State.touchY[0] &&  TS_State.touchY[0]< 190)){
+
+                    }else if((0 < TS_State.touchX[0] &&  TS_State.touchX[0]< 100) && (200 < TS_State.touchY[0] &&  TS_State.touchY[0]< 240)){
+                        location = LoudInfo;
+                    }
                     seconds=25;
                     break;
                 //Case screen load noises
@@ -110,7 +105,6 @@ void getCurrentScreenInfo(){
                         location = Information;
                         seconds = 25;
                     }
-                    touches=false;
                     break;
                 //Case screen locked
                 case 3:
@@ -138,12 +132,13 @@ void getCurrentScreenInfo(){
                     break;
             }
         }
+        ThisThread::sleep_for(40);
     }
 
 }
 void touchScreen(){
-               //Change the screen based on location
-               while(1){
+    //Change the screen based on location
+    while(1){
 
         if(seconds == 0){
             switch (location){
@@ -154,7 +149,7 @@ void touchScreen(){
 
             //Case screen information
             case 1:
-                screen->ScreenOne(tempSensor.readTemperature(type), lightSensor.readLight(), soundSensor->readSound());
+                screen->ScreenOne(rtTempCValue, rtLightValue, rtSoundValue);
                 break;
             //Case screen load noises
             case 2:
@@ -177,7 +172,8 @@ void touchScreen(){
 
            // getCurrentScreenInfo();
         }
-               }
+        ThisThread::sleep_for(500);
+    }
 
 }
 
