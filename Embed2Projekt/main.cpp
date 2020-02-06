@@ -18,124 +18,72 @@ Thread ScreenThread;
 
 //Different sensors
 Temperature tempSensor(A0,D2,D3);
-
 Thread clockThread;
-
 Sound* soundSensor = new Sound(A1);
-
 LightSensor lightSensor(A2);
 
+//Alarm object
+Alarm* alarm = new Alarm(D4);
+SD sd;
+Screen* screen = new Screen();
+
+//Object to get the time via ethernet
+Ethernet net;
+
+//Used to detect touches on the screen
+TS_StateTypeDef TS_State;
 //Enum containing the relevant screen
 enum UserLocation location;
 
 //Enum containing the temperature type
 enum Type type(C);
 
-//Used to detect touches on the screen
-TS_StateTypeDef TS_State;
 
-//Object to get the time via ethernet
-Ethernet net;
+float* rtSoundValue;
+float* rtLightValue;
+int* rtTempCValue;
+int seconds = 0;
+bool touches = true;
 
-//Alarm object
-Alarm* alarm = new Alarm(D4);
+//Check if unlocked
+bool pw=true;
 
-//Sound soundSensor(A1);
-//LightSensor lightSensor(A2);
-SD sd ;
-
-Screen* screen = new Screen();
-
+class Graph graph;
 Thread screenThread;
 
 void DisplayTime(){
-    screen->DisplayTime(net.GetTime());
-    ThisThread::sleep_for(1000);
+    //screen->DisplayTime(net.GetTime());
+    //ThisThread::sleep_for(1000);
 }
+void realTimeReadings(){
+    while(1){
+       *rtSoundValue = soundSensor->readSound();
+       *rtLightValue = lightSensor.readLight();
+       *rtTempCValue = tempSensor.readTemperature(C);
 
-class Graph graph;
-int main()
-{   
 
-
-    BSP_LCD_Init();
-    BSP_LCD_LayerDefaultInit(LTDC_ACTIVE_LAYER, LCD_FB_START_ADDRESS);
-    BSP_LCD_SelectLayer(LTDC_ACTIVE_LAYER);
-    graph.initGraph();
-    while(true){
-       float read = soundSensor->readSound();
-       float read1 = lightSensor.readLight();
-       int read2 = tempSensor.readTemperature(C);
-        graph.getGraph((int)read,(int)read1,read2);
-       printf("%.2f",read);
-        
-
+        ///Read the light. Used to make sure it's day/night base on threshold
+        lightSensor.threshold = 0.01;
+    
+        if(lightSensor.isItDay){
+            location=Locked;
+        }
     }
-    /* 
-
-    int seconds = 0;
-    //clockThread.start(DisplayTime);    
-     //sd.ReadPassword("123456");
-    bool touches = true;
-    //Set the default location
-    location = Information;
-    lightSensor.threshold = 0.01;
-    //New instance of the screen class. Used to navigate    
-    //Read the light. Used to make sure it'sday
-    lightSensor.readLight();
-    
-    
-    if(lightSensor.isItDay){
-        location=Locked;
-    }
-    
-    
-    //Check if unlocked
-    bool pw=true;
-
+}
+void screenSettings(){
 
     //Get room number
     screen->LoadingScreen("Nilas og Long", "Work in progress");
-
-    while (true) {
+}
+void getCurrentScreenInfo(){
+ 
         touches = true;
         if(seconds == 25){
             seconds =0;
         }else{
             seconds++;
         }
-        //Change the screen based on location
-        if(seconds == 0){
-            switch (location){
-            //Case loading
-            case 0:
-                screen->LoadingScreen("Nilas og Long", "Work in progress");
-                break;
 
-            //Case screen information
-            case 1:
-                screen->ScreenOne(tempSensor.readTemperature(type), lightSensor.readLight(), soundSensor->readSound());
-                break;
-            //Case screen load noises
-            case 2:
-                screen->ScreenTwo(soundSensor->getCounter);
-                break;
-            //Case screen locked
-            case 3:
-                screen->locked();
-                break;
-            //Case graph
-            case 4:
-                //screen->graph();
-                break;
-            //Default error
-            default:
-                BSP_LCD_DisplayStringAtLine(LINE(2), (uint8_t *) "Error");
-                break;
-
-            }
-        }
-        
         //Run while loop checking for touch input
         BSP_TS_GetState(&TS_State);
         if(TS_State.touchDetected){
@@ -189,7 +137,66 @@ int main()
                     break;
             }
         }
+}
+void touchScreen(){
+               //Change the screen based on location
+        if(seconds == 0){
+            switch (location){
+            //Case loading
+            case 0:
+                screen->LoadingScreen("Nilas og Long", "Work in progress");
+                break;
+
+            //Case screen information
+            case 1:
+                screen->ScreenOne(tempSensor.readTemperature(type), lightSensor.readLight(), soundSensor->readSound());
+                break;
+            //Case screen load noises
+            case 2:
+                screen->ScreenTwo(soundSensor->getCounter);
+                break;
+            //Case screen locked
+            case 3:
+                screen->locked();
+                break;
+            //Case graph
+            case 4:
+                //screen->graph();
+                break;
+            //Default error
+            default:
+                BSP_LCD_DisplayStringAtLine(LINE(2), (uint8_t *) "Error");
+                break;
+
+            }
+
+            getCurrentScreenInfo();
+        }
+}
+
+
+int main()
+{        
+    //Set the default location
+    location = Information;
+
+    //clockThread.start(DisplayTime);    
+     //sd.ReadPassword("123456");
+
+    screenSettings();
+
+    /// thread for running all readings from sensors in real time and its logics
+    Thread thread1;
+    thread1.start(&realTimeReadings);
+
+    /// thread for running touch input in real time
+    Thread thread2;
+    thread2.start(&touchScreen);
+
+
+    while (true) {
+
         ThisThread::sleep_for(40); 
     }
-    */
+    
 }   
