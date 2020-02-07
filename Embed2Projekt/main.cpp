@@ -54,21 +54,40 @@ bool useCelcius = true;
 
 
 
+/**
+*
+*   @author:  Nilas
+*   @date: 6/2-20
+*   @brief: Show time on the screen
+*/
 
 void DisplayTime(){
-    char buffer[32];
-    time_t timeNow = ethernet.GetTime();
+    //Update the time via the net
+    ethernet.GetTime();
+    //Var used to store the time
+    time_t seconds = time(NULL);
+
     while(1){
-        time_t seconds = time(NULL);
- 
+        //Run the loop, updating and checking time each second, and display the time;
         char buffer[32];
+
         strftime(buffer, 32, "%I:%M %p\n", localtime(&seconds));
-        BSP_LCD_DisplayStringAt(0, BSP_LCD_GetYSize(), (uint8_t *) buffer,RIGHT_MODE);
+
+        BSP_LCD_DisplayStringAt(0, 240, (uint8_t *) buffer,RIGHT_MODE);
         ThisThread::sleep_for(1000);
     }
+
 }
+
+/**
+*
+*   @author:  Nilas
+*   @date: 6/2-20
+*   @brief:Read the sensors and activate the alarm
+*/
 void realTimeReadings(){
     while(1){
+        //Read the three sensors
        rtSoundValue = soundSensor->readSound();
        rtLightValue = lightSensor.readLight();
 
@@ -80,7 +99,7 @@ void realTimeReadings(){
        }
 
 
-
+        //Check if it's night and the sound is above threshhold
         if(rtSoundValue > soundSensor->threshold && location == Information){
             BSP_LCD_DisplayStringAt(0,95, (uint8_t *)"Loud!",CENTER_MODE);
         }else{
@@ -98,10 +117,13 @@ void realTimeReadings(){
         */
     }
 }
-void screenSettings(){
-    //Get room number
-    screen->LoadingScreen("Nilas og Long", "Work in progress");
-}
+
+/**
+*
+*   @author:  Nilas
+*   @date: 21/1-20
+*   @brief: Screen containing sensor information 
+*/
 void TouchScreen(){
     while(1){
         //Run while loop checking for touch input
@@ -153,7 +175,12 @@ void TouchScreen(){
             ThisThread::sleep_for(40);
         }
     }
-}
+}/**
+*
+*   @author:  Nilas
+*   @date: 21/1-20
+*   @brief: Refresh the page with new information if possible
+*/
 void RefreshPage(){
     //Change the screen based on location
     while(1){
@@ -203,20 +230,27 @@ void RefreshPage(){
         ThisThread::sleep_for(200);
     }
 }
-
+/**
+*
+*   @author:  Nilas
+*   @date: 21/1-20
+*   @brief: Change the temperature unit
+*/
 void buttonInterrupt(){
     useCelcius = !useCelcius;
 }
 int main()
 {
+    ///set interrupt fall on button to run an function
     button.fall(&buttonInterrupt);
     //Set the default location
     location = Information;
 
-    clockThread.start(&DisplayTime);
+    
 
     //Setup the screen
-    screenSettings();
+    screen->LoadingScreen("Nilas og Long", "Embedded 2");
+
 
     /// thread for running all readings from sensors in real time and its logics
 
@@ -231,6 +265,8 @@ int main()
 
     //Thread for handling all touch events
     thread3.start(&TouchScreen);
+    
+    clockThread.start(&DisplayTime);
 
     //Thread for printing the time to the screen
     while (true) {

@@ -17,7 +17,7 @@ Ethernet::~Ethernet(){
 *   @date: 21/1-20
 *   @brief: Get timestamp since 1. january 1970
 */
-time_t Ethernet::GetTime(){
+void Ethernet::GetTime(){
     //Get ethernet connection
     EthernetInterface eth;
     //Connect to internet and get ip address
@@ -34,6 +34,5 @@ time_t Ethernet::GetTime(){
     //Set time on device
     set_time(timestamp);
     //Set time var in main
-    return timestamp;//ctime(&timestamp);
     
 }
