@@ -12,7 +12,7 @@ class Ethernet{
     public:
         Ethernet();
         ~Ethernet();
-        time_t GetTime();
+        void GetTime();
 
 };
 #endif
