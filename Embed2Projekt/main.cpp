@@ -4,7 +4,6 @@
 
 
 
-Thread ScreenThread;
 #include "SD.h"
 #include "Temperature.h"
 #include "Sound.h"
@@ -12,7 +11,7 @@ Thread ScreenThread;
 #include "EthernetClass.h"
 #include "Alarm.h"
 #include "Graph.h"
-// main() runs in its own thread in the OS
+
 
 
 
@@ -22,10 +21,17 @@ Temperature tempSensor(A0,D2,D3);
 Sound* soundSensor = new Sound(A1);
 LightSensor lightSensor(A2);
 
-//Alarm object
+//Alarm objects
 Alarm* alarm = new Alarm(D4);
 SD sd;
 Screen* screen = new Screen();
+
+///threads
+Thread screenThread;
+Thread thread1;
+Thread thread2;
+Thread thread3;
+Thread clockThread;
 
 //Object to get the time via ethernet
 Ethernet ethernet;
@@ -37,10 +43,8 @@ TS_StateTypeDef TS_State;
 //Enum containing the relevant screen
 enum UserLocation location;
 
-//Enum containing the temperature type
 
-
-
+///Fields
 float rtSoundValue;
 float rtLightValue;
 int rtTempCValue;
@@ -49,7 +53,7 @@ int seconds = 0;
 bool useCelcius = true;
 
 
-Thread screenThread;
+
 
 void DisplayTime(){
     char buffer[32];
@@ -209,7 +213,6 @@ int main()
     //Set the default location
     location = Information;
 
-    Thread clockThread;
     clockThread.start(&DisplayTime);
 
     //Setup the screen
@@ -217,18 +220,16 @@ int main()
 
     /// thread for running all readings from sensors in real time and its logics
 
-    Thread thread1;
+    
     thread1.start(&realTimeReadings);
 
 
     screen->ScreenOne(rtTempCValue, rtLightValue, rtSoundValue, Location);
 
     /// thread for running touch input in real time
-    Thread thread2;
     thread2.start(&RefreshPage);
 
     //Thread for handling all touch events
-    Thread thread3;
     thread3.start(&TouchScreen);
 
     //Thread for printing the time to the screen
