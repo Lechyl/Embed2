@@ -226,15 +226,15 @@ void Screen::ScreenOne(int temperature, float light, float sound, UserLocation l
     char stringValues[20];
     
     sprintf(stringValues, "Temperatur: %d",temperature);
-    BSP_LCD_DisplayStringAtLine(LINE(1), (uint8_t *)"Temperatur:                  ");
+    BSP_LCD_DisplayStringAt(0,LINE(1), (uint8_t *)"Temperatur:                  ",LEFT_MODE);
 
     BSP_LCD_DisplayStringAt(0, LINE(1), (uint8_t *) stringValues , LEFT_MODE);
     sprintf(stringValues, "Light: %.2f",light);
-    BSP_LCD_DisplayStringAtLine(LINE(2), (uint8_t *)"Light:                    ");
+    BSP_LCD_DisplayStringAt(0,LINE(2), (uint8_t *)"Light:                    ",LEFT_MODE);
 
     BSP_LCD_DisplayStringAt(0, LINE(2), (uint8_t *) stringValues , LEFT_MODE);
     sprintf(stringValues, "Sound: %.2f",sound);
-    BSP_LCD_DisplayStringAtLine(LINE(3), (uint8_t *)"Sound:                   ");
+    BSP_LCD_DisplayStringAt(0,LINE(3), (uint8_t *)"Sound:                   ",LEFT_MODE);
 
     BSP_LCD_DisplayStringAt(0, LINE(3), (uint8_t *) stringValues , LEFT_MODE);
     
@@ -264,11 +264,11 @@ void Screen::ScreenTwo(int counter, UserLocation location, float highScore){
     }
     char stringValues[20];
     sprintf(stringValues, "Loud noises: %d",counter);
-    BSP_LCD_DisplayStringAtLine(LINE(0), (uint8_t *)"Loud noises:              ");
+    BSP_LCD_DisplayStringAt(0,LINE(0), (uint8_t *)"Loud noises:              ",LEFT_MODE);
 
     BSP_LCD_DisplayStringAt(0, LINE(0), (uint8_t *) stringValues , LEFT_MODE);
     sprintf(stringValues, "High Score: %2.f",highScore);
-    BSP_LCD_DisplayStringAtLine(LINE(1), (uint8_t *)"High Score:              ");
+    BSP_LCD_DisplayStringAt(0,LINE(1), (uint8_t *)"High Score:              ",LEFT_MODE);
 
     BSP_LCD_DisplayStringAt(0,LINE(1), (uint8_t *) stringValues, LEFT_MODE);
 
